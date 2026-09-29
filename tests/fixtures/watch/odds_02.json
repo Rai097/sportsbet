@@ -1,0 +1,250 @@
+[
+ {
+  "id": "evt1",
+  "sport_key": "americanfootball_nfl",
+  "commence_time": "2099-10-04T17:00:00Z",
+  "home_team": "Buffalo Bills",
+  "away_team": "New England Patriots",
+  "bookmakers": [
+   {
+    "key": "pinnacle",
+    "title": "Pinnacle",
+    "last_update": "2099-10-01T12:00:00Z",
+    "markets": [
+     {
+      "key": "h2h",
+      "outcomes": [
+       {
+        "name": "Buffalo Bills",
+        "price": -200
+       },
+       {
+        "name": "New England Patriots",
+        "price": 172
+       }
+      ]
+     },
+     {
+      "key": "spreads",
+      "outcomes": [
+       {
+        "name": "Buffalo Bills",
+        "price": -105,
+        "point": -4.5
+       },
+       {
+        "name": "New England Patriots",
+        "price": -105,
+        "point": 4.5
+       }
+      ]
+     },
+     {
+      "key": "totals",
+      "outcomes": [
+       {
+        "name": "Over",
+        "price": -104,
+        "point": 45.5
+       },
+       {
+        "name": "Under",
+        "price": -106,
+        "point": 45.5
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "key": "betmgm",
+    "title": "BetMGM",
+    "last_update": "2099-10-01T12:00:00Z",
+    "markets": [
+     {
+      "key": "h2h",
+      "outcomes": [
+       {
+        "name": "Buffalo Bills",
+        "price": -300
+       },
+       {
+        "name": "New England Patriots",
+        "price": 285
+       }
+      ]
+     },
+     {
+      "key": "spreads",
+      "outcomes": [
+       {
+        "name": "Buffalo Bills",
+        "price": -110,
+        "point": -7.0
+       },
+       {
+        "name": "New England Patriots",
+        "price": -110,
+        "point": 7.0
+       }
+      ]
+     },
+     {
+      "key": "totals",
+      "outcomes": [
+       {
+        "name": "Over",
+        "price": -110,
+        "point": 47.5
+       },
+       {
+        "name": "Under",
+        "price": -110,
+        "point": 47.5
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "key": "williamhill_us",
+    "title": "Caesars",
+    "last_update": "2099-10-01T12:00:00Z",
+    "markets": [
+     {
+      "key": "h2h",
+      "outcomes": [
+       {
+        "name": "Buffalo Bills",
+        "price": -210
+       },
+       {
+        "name": "New England Patriots",
+        "price": 175
+       }
+      ]
+     },
+     {
+      "key": "spreads",
+      "outcomes": [
+       {
+        "name": "Buffalo Bills",
+        "price": -110,
+        "point": -4.5
+       },
+       {
+        "name": "New England Patriots",
+        "price": -110,
+        "point": 4.5
+       }
+      ]
+     },
+     {
+      "key": "totals",
+      "outcomes": [
+       {
+        "name": "Over",
+        "price": -110,
+        "point": 45.5
+       },
+       {
+        "name": "Under",
+        "price": -110,
+        "point": 45.5
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "evt2",
+  "sport_key": "americanfootball_nfl",
+  "commence_time": "2099-10-04T20:25:00Z",
+  "home_team": "Las Vegas Raiders",
+  "away_team": "Kansas City Chiefs",
+  "bookmakers": [
+   {
+    "key": "draftkings",
+    "title": "DraftKings",
+    "last_update": "2099-10-01T12:00:00Z",
+    "markets": [
+     {
+      "key": "h2h",
+      "outcomes": [
+       {
+        "name": "Las Vegas Raiders",
+        "price": 205
+       },
+       {
+        "name": "Kansas City Chiefs",
+        "price": -250
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "key": "fanduel",
+    "title": "FanDuel",
+    "last_update": "2099-10-01T12:00:00Z",
+    "markets": [
+     {
+      "key": "h2h",
+      "outcomes": [
+       {
+        "name": "Las Vegas Raiders",
+        "price": 200
+       },
+       {
+        "name": "Kansas City Chiefs",
+        "price": -245
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "key": "betmgm",
+    "title": "BetMGM",
+    "last_update": "2099-10-01T12:00:00Z",
+    "markets": [
+     {
+      "key": "h2h",
+      "outcomes": [
+       {
+        "name": "Las Vegas Raiders",
+        "price": 170
+       },
+       {
+        "name": "Kansas City Chiefs",
+        "price": -200
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "key": "williamhill_us",
+    "title": "Caesars",
+    "last_update": "2099-10-01T12:00:00Z",
+    "markets": [
+     {
+      "key": "h2h",
+      "outcomes": [
+       {
+        "name": "Las Vegas Raiders",
+        "price": 205
+       },
+       {
+        "name": "Kansas City Chiefs",
+        "price": -250
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

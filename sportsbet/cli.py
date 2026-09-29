@@ -10,6 +10,7 @@ from pathlib import Path
 
 import pandas as pd
 
+from sportsbet import alerts, poller
 from sportsbet import backtest as bt
 from sportsbet.config import load_settings
 from sportsbet.engine import format_candidates, scan
@@ -203,6 +204,8 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("--ml-edge", type=float, default=0.03, help="min model-vs-market prob gap to bet a moneyline")
     s.add_argument("--ats-edge", type=float, default=2.0, help="min points of disagreement to bet a spread")
     s.set_defaults(func=cmd_backtest)
+    alerts.register(sub)
+    poller.register(sub)
     return p
 
 
