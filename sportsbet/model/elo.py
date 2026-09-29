@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import math
 from dataclasses import dataclass, field
+from typing import Any
 
 import pandas as pd
 
@@ -65,8 +66,11 @@ class EloModel:
             "home_spread": self.spread_from_diff(diff),
         }
 
-    def update(self, home: str, away: str, home_score: float, away_score: float, neutral: bool = False) -> None:
-        diff = self.pregame_diff(home, away, neutral)
+    def update(
+        self, home: str, away: str, home_score: float, away_score: float, neutral: bool = False, extra_points: float = 0.0
+    ) -> None:
+        """extra_points shifts the pregame expectation, so a result is judged against it."""
+        diff = self.pregame_diff(home, away, neutral, extra_points)
         expected = self.win_prob_from_diff(diff)
         margin = home_score - away_score
         actual = 1.0 if margin > 0 else 0.0 if margin < 0 else 0.5
@@ -77,18 +81,22 @@ class EloModel:
         self.ratings[home] = self.rating(home) + shift
         self.ratings[away] = self.rating(away) - shift
 
+    # Schedule-row hooks. Subclasses (e.g. the QB-aware model) override these to use
+    # per-game columns such as the listed starting quarterbacks.
+    def predict_game(self, g: Any, extra_points: float = 0.0) -> dict[str, float]:
+        neutral = getattr(g, "location", "Home") == "Neutral"
+        return self.predict(g.home_team, g.away_team, neutral=neutral, extra_points=extra_points)
+
+    def update_game(self, g: Any) -> None:
+        neutral = getattr(g, "location", "Home") == "Neutral"
+        self.update(g.home_team, g.away_team, float(g.home_score), float(g.away_score), neutral=neutral)
+
     def fit(self, games: pd.DataFrame) -> "EloModel":
         """Consume completed games in chronological order."""
         played = games[games["result"].notna()].sort_values(["season", "gameday", "gametime"])
         for g in played.itertuples(index=False):
             self._new_season(int(g.season))
-            self.update(
-                g.home_team,
-                g.away_team,
-                float(g.home_score),
-                float(g.away_score),
-                neutral=(getattr(g, "location", "Home") == "Neutral"),
-            )
+            self.update_game(g)
         return self
 
     def table(self) -> pd.DataFrame:
