@@ -55,6 +55,7 @@ python -m sportsbet bet list --open
 python -m sportsbet bet settle           # capture closing lines, grade from results
 python -m sportsbet clv                  # ROI and closing line value by book and market
 
+python -m sportsbet pushchart --rebuild  # refit the key-number push chart from nflverse
 python -m sportsbet report               # markdown report under reports/
 python -m sportsbet run-tick             # one unattended tick (what GitHub Actions runs)
 ```
@@ -103,7 +104,8 @@ backtested here. It is measured going forward via the `bets` table and closing l
 sportsbet/
   config.py          settings, target and reference book keys
   pricing.py         odds conversion, de-vig, EV, Kelly
-  engine.py          +EV scan against fair prices
+  engine.py          +EV scan against fair prices, cross-point via the push chart
+  pushchart.py       key-number margin and total distributions, fair line conversion
   alerts.py          injury status changes, stale lines, prioritised alerts
   poller.py          watch loop with odds credit budget
   tracking.py        bet log, closing line capture, settlement, CLV report
@@ -125,8 +127,11 @@ tests/               unit tests plus recorded API fixtures
 
 ## Known limits and next steps
 
-- Spreads and totals are compared only at the same point. Converting across half points
-  needs a push chart built from historical margins (nflverse has the data).
+- Cross-point spreads and totals (a Caesars -7.5 against Pinnacle's -7) are priced through
+  a key-number push chart fitted on 4,175 games in `sportsbet/pushchart.py`. Measured on
+  held-out seasons it beats a plain normal, but it still under-predicts pushes exactly on 3
+  and 7 by about one standard error. The half point at 3 is worth about 7.9 points of win
+  probability on the push side and 2.9 on the other.
 - The QB injury weight is measured: closing lines moved 3.76 points on average when an
   established starter was replaced by a backup (214 games, 2011 to 2026), so a QB counts
   3.8 points or 0.9 points per unit of value gap to the next QB up when both are rated.
