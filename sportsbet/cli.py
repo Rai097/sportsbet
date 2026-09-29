@@ -10,6 +10,7 @@ from pathlib import Path
 
 import pandas as pd
 
+from sportsbet import alerts, poller
 from sportsbet import backtest as bt
 from sportsbet import tracking
 from sportsbet.config import load_settings
@@ -205,6 +206,8 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("--ats-edge", type=float, default=2.0, help="min points of disagreement to bet a spread")
     s.set_defaults(func=cmd_backtest)
     tracking.register(sub)
+    alerts.register(sub)
+    poller.register(sub)
     return p
 
 

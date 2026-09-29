@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from collections.abc import Iterable
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
@@ -76,6 +77,21 @@ CREATE TABLE IF NOT EXISTS bet_meta (
     closing_fetched_at TIMESTAMPTZ,
     closing_fair_source VARCHAR,
     note VARCHAR
+);
+CREATE TABLE IF NOT EXISTS alerts (
+    created_at TIMESTAMPTZ,
+    alert_key VARCHAR,
+    priority VARCHAR,
+    trigger VARCHAR,
+    event_id VARCHAR,
+    commence_time TIMESTAMPTZ,
+    matchup VARCHAR,
+    bookmaker VARCHAR,
+    market VARCHAR,
+    side VARCHAR,
+    point DOUBLE,
+    price DOUBLE,
+    detail VARCHAR
 );
 """
 
@@ -204,3 +220,67 @@ class Store:
             """,
             [event_id, bookmaker, market, outcome, ts],
         ).df()
+
+    def injury_snapshot_times(self, source: str | None = None) -> list[pd.Timestamp]:
+        """Distinct fetch times of stored injury snapshots, oldest first."""
+        sql = "SELECT DISTINCT fetched_at FROM injuries"
+        params: list[Any] = []
+        if source is not None:
+            sql += " WHERE source = ?"
+            params.append(source)
+        # via a DataFrame because fetchall() on TIMESTAMPTZ requires pytz
+        return self.con.execute(sql + " ORDER BY fetched_at", params).df()["fetched_at"].tolist()
+
+    def injury_snapshot(self, fetched_at: datetime, source: str | None = None) -> pd.DataFrame:
+        """Every row of the injury snapshot taken at fetched_at."""
+        sql = "SELECT * FROM injuries WHERE fetched_at = ?"
+        params: list[Any] = [fetched_at]
+        if source is not None:
+            sql += " AND source = ?"
+            params.append(source)
+        return self.con.execute(sql, params).df()
+
+    def previous_injuries(self, source: str | None = None) -> pd.DataFrame:
+        """Rows of the snapshot before the most recent one (empty if fewer than two exist).
+
+        Unlike latest_injuries this is a whole snapshot, so a player missing from it was
+        not on the report at that time.
+        """
+        times = self.injury_snapshot_times(source)
+        if len(times) < 2:
+            return self.con.execute("SELECT * FROM injuries WHERE false").df()
+        return self.injury_snapshot(times[-2], source)
+
+    def odds_history(
+        self,
+        event_id: str | None = None,
+        market: str | None = None,
+        hours: float | None = 24.0,
+        now: datetime | None = None,
+    ) -> pd.DataFrame:
+        """Odds rows for upcoming events fetched within the last `hours` (None = all), oldest first."""
+        now = now or datetime.now(timezone.utc)
+        sql = "SELECT * FROM odds_snapshots WHERE commence_time > ?"
+        params: list[Any] = [now]
+        if hours is not None:
+            sql += " AND fetched_at >= ?"
+            params.append(now - timedelta(hours=hours))
+        if event_id is not None:
+            sql += " AND event_id = ?"
+            params.append(event_id)
+        if market is not None:
+            sql += " AND market = ?"
+            params.append(market)
+        return self.con.execute(sql + " ORDER BY fetched_at", params).df()
+
+    def insert_alerts(self, alerts: Iterable[Any]) -> int:
+        return self.insert_rows("alerts", alerts)
+
+    def recent_alert_keys(self, hours: float | None = None) -> set[str]:
+        """Keys of alerts already emitted, optionally only those from the last `hours`."""
+        sql = "SELECT DISTINCT alert_key FROM alerts"
+        params: list[Any] = []
+        if hours is not None:
+            sql += " WHERE created_at >= ?"
+            params.append(datetime.now(timezone.utc) - timedelta(hours=hours))
+        return {r[0] for r in self.con.execute(sql, params).fetchall()}
