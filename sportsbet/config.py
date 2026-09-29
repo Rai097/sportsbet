@@ -56,6 +56,7 @@ SPORT_KEY = "americanfootball_nfl"
 class Settings:
     odds_api_key: str | None = field(default_factory=lambda: os.environ.get("ODDS_API_KEY"))
     odds_api_base: str = "https://api.the-odds-api.com/v4"
+    oddspapi_api_key: str | None = field(default_factory=lambda: os.environ.get("ODDSPAPI_API_KEY"))
     # site.api.espn.com answers 403 to datacenter IPs (GitHub runners); site.web.api does not.
     espn_injuries_url: str = "https://site.web.api.espn.com/apis/site/v2/sports/football/nfl/injuries"
     data_dir: Path = DATA_DIR

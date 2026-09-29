@@ -104,6 +104,7 @@ jobs:
       - name: Run tick
         env:
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
+          ODDSPAPI_API_KEY: ${{ secrets.ODDSPAPI_API_KEY }}
           FORCE_PULL: ${{ inputs.force_pull }}
           PROBE: ${{ inputs.probe }}
         run: |

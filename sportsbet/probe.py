@@ -8,6 +8,7 @@ endpoint, if any, serves injuries to a datacenter IP. It spends 2 API credits.
 
 from __future__ import annotations
 
+import json
 import sys
 
 import requests
@@ -56,9 +57,42 @@ def probe_odds_books(settings, session: requests.Session | None = None) -> tuple
     return books, quota
 
 
+def probe_oddspapi(settings) -> None:
+    """Discover Caesars and NFL ids on OddsPapi and print one raw odds sample for the normaliser."""
+    from sportsbet.providers.oddspapi import OddsPapiClient, discover
+
+    client = OddsPapiClient(settings.oddspapi_api_key)
+    found = discover(client)
+    for k, v in found.items():
+        print(f"-- {k}")
+        print(json.dumps(v, indent=1)[:1500])
+    books = found["caesars_bookmakers"]
+    tours = found["nfl_tournaments"]
+    if books and tours:
+        bk = books[0]
+        tr = tours[0]
+        bk_key = bk.get("slug") or bk.get("key") or bk.get("id") or bk.get("bookmaker") if isinstance(bk, dict) else bk
+        tr_id = tr.get("id") or tr.get("tournamentId") if isinstance(tr, dict) else tr
+        print(f"-- odds sample bookmaker={bk_key} tournament={tr_id}")
+        try:
+            sample = client.odds_by_tournaments(str(bk_key), str(tr_id), oddsFormat="american")
+            text = json.dumps(sample)
+            print(f"payload {len(text)} chars, top-level type {type(sample).__name__}")
+            print(text[:3000])
+        except RuntimeError as exc:
+            print(f"odds sample failed: {exc}")
+    print(f"oddspapi calls used this probe: {client.calls}")
+
+
 def cmd_probe(args) -> int:
     """Print which bookmakers the odds feed returns for NFL and which ESPN endpoints answer."""
     settings = load_settings()
+    if settings.oddspapi_api_key:
+        print("== OddsPapi discovery (Caesars, NFL)")
+        try:
+            probe_oddspapi(settings)
+        except Exception as exc:  # diagnostics only
+            print(f"oddspapi probe failed: {str(exc).replace(settings.oddspapi_api_key, '<KEY>')}")
     print("== ESPN endpoints")
     for url, result in probe_espn():
         print(f"{result}\n    {url}")
