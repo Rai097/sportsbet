@@ -1,4 +1,5 @@
 import pandas as pd
+import pytest
 
 from sportsbet.model.elo import EloModel
 from sportsbet.model.injuries import matchup_adjustment, starters_from_depth_chart, team_impacts
@@ -46,11 +47,11 @@ def test_injury_impacts_and_adjustment():
     )
     starters = {("BUF", "Josh Allen"), ("NE", "Starting Tackle")}
     imp = team_impacts(inj, starters)
-    assert imp["BUF"].points == 5.0  # backup WR questionable is below the 0.05 threshold
+    assert imp["BUF"].points == 3.8  # backup WR questionable is below the 0.05 threshold
     assert imp["NE"].points == 0.6
-    # BUF hosting NE: BUF loses 5, NE loses 0.6 -> adjustment favours away by 4.4
-    assert matchup_adjustment(imp, "BUF", "NE") == -4.4
-    assert matchup_adjustment(imp, "NE", "BUF") == 4.4
+    # BUF hosting NE: BUF loses 3.8, NE loses 0.6 -> adjustment favours away by 3.2
+    assert matchup_adjustment(imp, "BUF", "NE") == pytest.approx(-3.2)
+    assert matchup_adjustment(imp, "NE", "BUF") == pytest.approx(3.2)
 
 
 def test_starters_from_current_depth_chart_schema():

@@ -1,9 +1,15 @@
 """Turn an injury report into a point-spread adjustment.
 
-This is a documented heuristic, not a fitted model. Each position carries a rough
-"points of spread" value for a starter being unavailable. QBs dominate; everyone
-else is small and mostly matters in aggregate. Depth charts decide who is a starter.
-Doubtful players count at 80%, Questionable at 35% (roughly historical play rates).
+Non-QB weights are a documented heuristic, not a fitted model. Each position carries a
+rough "points of spread" value for a starter being unavailable; they are small and mostly
+matter in aggregate. Depth charts decide who is a starter. Doubtful players count at 80%,
+Questionable at 35% (roughly historical play rates).
+
+The QB weight is measured from the market (sportsbet.model.qb.measure_market_qb_price):
+across 214 games from 2011-2026 where an established starter gave way to a backup, the
+closing spread moved 3.8 points against the team beyond what plain Elo expected
+(3.2 on 2011-2018, 4.2 on 2019-2026). When the QB model knows both the starter's and the
+next man's value, the market's price per unit of value gap (0.9) replaces the flat 3.8.
 """
 
 from __future__ import annotations
@@ -13,7 +19,7 @@ from dataclasses import dataclass
 import pandas as pd
 
 STARTER_POINTS = {
-    "QB": 5.0,
+    "QB": 3.8,  # market move for starter -> backup, see module docstring
     "RB": 0.6,
     "WR": 0.7,
     "TE": 0.4,
@@ -43,6 +49,10 @@ STARTER_POINTS = {
 BACKUP_FRACTION = 0.15  # a non-starter counts for this fraction of the starter value
 STATUS_WEIGHT = {"Out": 1.0, "Doubtful": 0.8, "Questionable": 0.35}
 TEAM_CAP = 10.0  # never move a line more than this on injuries alone
+# Market points per unit of QB value gap (qb.py value units), from the same backup games:
+# 3.76 points moved / 4.21 value lost. 2011-2018 alone gives 0.78; the outcome-fitted
+# model weight is 0.8, so the market and results agree to within noise.
+QB_POINTS_PER_VALUE = 0.9
 
 
 @dataclass
@@ -81,8 +91,13 @@ def team_impacts(
     status_col: str = "status",
     player_col: str = "player",
     position_col: str = "position",
+    qb_gaps: dict[tuple[str, str], float] | None = None,
 ) -> dict[str, InjuryImpact]:
-    """Aggregate per-team point impact from an injury table."""
+    """Aggregate per-team point impact from an injury table.
+
+    qb_gaps maps (team, starting QB) to his value over the next QB up (see
+    qb.qb_injury_gaps). When present it prices that QB instead of the flat weight.
+    """
     out: dict[str, InjuryImpact] = {}
     for row in injuries.itertuples(index=False):
         status = getattr(row, status_col)
@@ -97,6 +112,10 @@ def team_impacts(
         player = getattr(row, player_col)
         is_starter = starters is None or (team, player) in starters
         pts = base * weight * (1.0 if is_starter else BACKUP_FRACTION)
+        if pos == "QB" and qb_gaps and (team, player) in qb_gaps:
+            # A known value gap beats the flat weight; a backup as good as the starter costs ~0.
+            is_starter = True
+            pts = max(qb_gaps[(team, player)], 0.0) * QB_POINTS_PER_VALUE * weight
         if pts < 0.05:
             continue
         impact = out.setdefault(team, InjuryImpact(team=team, points=0.0, detail=[]))

@@ -23,6 +23,7 @@ from sportsbet.model.injuries import (
     starters_from_depth_chart,
     team_impacts,
 )
+from sportsbet.model.qb import QbEloModel, load_qb_game_values
 from sportsbet.providers import nflverse
 from sportsbet.providers.espn import fetch_espn_injuries
 from sportsbet.providers.odds_api import OddsApiClient, load_fixture, normalize
@@ -134,40 +135,67 @@ def cmd_injuries(args) -> int:
 def cmd_week(args) -> int:
     """Show this week's slate with nflverse reference lines and the model's view."""
     season = nflverse.current_season()
-    sched = nflverse.load_schedules(list(range(season - 6, season + 1)))
+    seasons = list(range(season - 6, season + 1))
+    sched = nflverse.load_schedules(seasons)
     cur = sched[sched["season"] == season]
     week = args.week or nflverse.current_week(cur)
     model = EloModel().fit(sched)
+    qb_model = None
+    try:
+        qb_model = QbEloModel.from_game_values(load_qb_game_values(seasons, sched)).fit(sched)
+    except Exception as exc:  # player stats are best-effort; plain Elo still prints
+        log.warning("QB model unavailable: %s", exc)
     games = nflverse.week_games(sched, season, week)
     rows = []
     for g in games.itertuples(index=False):
         pred = model.predict(g.home_team, g.away_team)
-        rows.append(
-            {
-                "date": g.gameday.date(),
-                "game": f"{g.away_team} @ {g.home_team}",
-                "mkt_spread": g.spread_line,
-                "elo_spread": round(pred["home_spread"], 1),
-                "diff": round(pred["home_spread"] - g.spread_line, 1) if pd.notna(g.spread_line) else None,
-                "home_ml": g.home_moneyline,
-                "elo_home_p": f"{pred['home_win_prob']:.1%}",
-            }
-        )
-    print(f"{season} week {week}  (mkt_spread is home margin, positive = home favoured)")
+        row = {
+            "date": g.gameday.date(),
+            "game": f"{g.away_team} @ {g.home_team}",
+            "mkt_spread": g.spread_line,
+            "elo_spread": round(pred["home_spread"], 1),
+            "diff": round(pred["home_spread"] - g.spread_line, 1) if pd.notna(g.spread_line) else None,
+            "home_ml": g.home_moneyline,
+            "elo_home_p": f"{pred['home_win_prob']:.1%}",
+        }
+        if qb_model is not None:
+            qpred = qb_model.predict_game(g)
+            home_qb, away_qb = qb_model.starters(g)
+            # A trailing * marks a QB guessed from the team's last start (schedule has none yet).
+            row["qbs"] = (
+                f"{qb_model.qb.names.get(away_qb, '?')}{'' if pd.notna(g.away_qb_name) else '*'} @ "
+                f"{qb_model.qb.names.get(home_qb, '?')}{'' if pd.notna(g.home_qb_name) else '*'}"
+            )
+            row["qb_spread"] = round(qpred["home_spread"], 1)
+            row["qb_diff"] = round(qpred["home_spread"] - g.spread_line, 1) if pd.notna(g.spread_line) else None
+            row["qb_home_p"] = f"{qpred['home_win_prob']:.1%}"
+        rows.append(row)
+    print(f"{season} week {week}  (mkt_spread is home margin, positive = home favoured; qb_* adds the starting-QB adjustment)")
     print(pd.DataFrame(rows).to_string(index=False))
     return 0
 
 
 def cmd_backtest(args) -> int:
-    """Walk-forward Elo vs closing lines on nflverse history."""
-    sched = nflverse.load_schedules(list(range(args.start, args.end + 1)))
-    res = bt.evaluate(sched, eval_from=args.eval_from, ml_edge=args.ml_edge, ats_edge=args.ats_edge)
+    """Walk-forward Elo (plain and QB-aware) vs closing lines on nflverse history."""
+    seasons = list(range(args.start, args.end + 1))
+    sched = nflverse.load_schedules(seasons)
+    try:
+        qb_values = load_qb_game_values(seasons, sched)
+    except Exception as exc:  # player stats are best-effort; plain Elo still runs
+        log.warning("QB game values unavailable, plain Elo only: %s", exc)
+        qb_values = None
+    res = bt.evaluate(sched, eval_from=args.eval_from, ml_edge=args.ml_edge, ats_edge=args.ats_edge, qb_values=qb_values)
     print(res.summary())
+    print(f"\ncomparison ({int(res.metrics['games'])} games, {args.eval_from}+):")
+    print(bt.comparison_table(res.metrics).round(4).to_string())
     print("\ncalibration (model):")
     print(bt.calibration_table(res.games).to_string())
+    if "qb_home_win_prob" in res.games:
+        print("\ncalibration (QB-aware model):")
+        print(bt.calibration_table(res.games, col="qb_home_win_prob").to_string())
     if res.bets is not None and not res.bets.empty:
         print("\nROI by season:")
-        print(res.bets.groupby(["type", "season"])["pnl"].agg(["count", "mean"]).round(3).to_string())
+        print(res.bets.groupby(["model", "type", "season"])["pnl"].agg(["count", "mean"]).round(3).unstack(0).to_string())
     return 0
 
 
