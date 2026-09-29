@@ -140,13 +140,19 @@ class OddsApiClient:
             raise QuotaExhausted(
                 f"Only {self.quota.remaining} credits left, below floor {self.settings.quota_floor}"
             )
-        params = {**params, "apiKey": self.settings.odds_api_key}
-        resp = self.session.get(f"{self.settings.odds_api_base}{path}", params=params, timeout=30)
-        self.quota.update_from_headers(resp.headers)
-        log.info(
-            "odds api %s cost=%s remaining=%s", path, self.quota.last_cost, self.quota.remaining
-        )
-        resp.raise_for_status()
+        key = self.settings.odds_api_key
+        params = {**params, "apiKey": key}
+        try:
+            resp = self.session.get(f"{self.settings.odds_api_base}{path}", params=params, timeout=30)
+            self.quota.update_from_headers(resp.headers)
+            log.info(
+                "odds api %s cost=%s remaining=%s", path, self.quota.last_cost, self.quota.remaining
+            )
+            resp.raise_for_status()
+        except requests.RequestException as exc:
+            # requests puts the full URL, key included, in its messages; callers print them
+            msg = str(exc).replace(key, "<ODDS_API_KEY>")
+            raise type(exc)(msg, response=exc.response) from None
         return resp.json()
 
     def fetch_nfl_odds(

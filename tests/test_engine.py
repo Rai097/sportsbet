@@ -147,3 +147,31 @@ def test_model_probs_attached_to_h2h():
     cands = scan(df, min_ev=0.0, model_probs={("evt1", "NE"): 0.3})
     ne = _find(cands, "betmgm", "h2h", "NE")
     assert ne.model_prob == 0.3
+
+
+def test_latest_odds_drops_quotes_from_older_pulls(tmp_path):
+    """A line that moved off a point, or a market taken down, must not be scanned again."""
+    from datetime import datetime, timedelta, timezone
+
+    from sportsbet.store import Store
+
+    t0 = datetime(2026, 10, 1, 12, tzinfo=timezone.utc)
+    first = _odds_df().assign(fetched_at=t0)
+    later = first[first.bookmaker != "williamhill_us"].copy()  # Caesars pulled its markets
+    later["fetched_at"] = t0 + timedelta(hours=2)
+    pin = (later.bookmaker == "pinnacle") & (later.market == "spreads") & (later.event_id == "evt1")
+    later.loc[pin, "point"] = later.loc[pin, "point"] * 4.5 / 7.0  # Pinnacle BUF -7 -> -4.5
+    store = Store(tmp_path / "t.duckdb")
+    store.insert_rows("odds_snapshots", first.to_dict("records"))
+    store.insert_rows("odds_snapshots", later.to_dict("records"))
+
+    latest = store.latest_odds()
+    assert set(latest["fetched_at"].dt.tz_convert("UTC")) == {pd.Timestamp(t0 + timedelta(hours=2))}
+    assert "williamhill_us" not in set(latest["bookmaker"])
+    pin_pts = latest[(latest.bookmaker == "pinnacle") & (latest.market == "spreads")]["point"]
+    assert sorted(pin_pts.abs()) == [4.5, 4.5]
+
+    # BetMGM still dealing NE +7 against a -4.5 market is the edge, priced off the live line
+    ne = _find(scan(latest, min_ev=0.0), "betmgm", "spreads", "NE")
+    assert ne.fair_source == "pinnacle@+4.5" and ne.ev > 0.05
+    store.close()

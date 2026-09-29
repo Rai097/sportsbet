@@ -129,17 +129,25 @@ class Store:
         return self._insert_df(table, df)
 
     def latest_odds(self) -> pd.DataFrame:
-        """Most recent price per (event, book, market, outcome, point) across all snapshots."""
+        """Every quote from the most recent pull of each upcoming event.
+
+        One pull returns every book and market at once, so the newest pull is the whole
+        board. Keeping older rows would resurrect a spread or total at a point the book has
+        since moved off (and a market a book has taken down), and the scan would price
+        those dead quotes. row_number drops duplicates if a pull was stored twice.
+        """
         return self.con.execute(
             """
-            SELECT * EXCLUDE (rn) FROM (
-                SELECT *, row_number() OVER (
-                    PARTITION BY event_id, bookmaker, market, outcome, point
-                    ORDER BY fetched_at DESC
-                ) AS rn
+            SELECT * EXCLUDE (rn, latest) FROM (
+                SELECT *,
+                    max(fetched_at) OVER (PARTITION BY event_id) AS latest,
+                    row_number() OVER (
+                        PARTITION BY event_id, bookmaker, market, outcome, point
+                        ORDER BY fetched_at DESC
+                    ) AS rn
                 FROM odds_snapshots
                 WHERE commence_time > now()
-            ) WHERE rn = 1
+            ) WHERE rn = 1 AND fetched_at = latest
             """
         ).df()
 

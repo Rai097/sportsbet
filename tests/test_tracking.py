@@ -3,11 +3,12 @@ from datetime import datetime, timedelta, timezone
 import pandas as pd
 import pytest
 
-from sportsbet import tracking
+from sportsbet import pushchart, tracking
 from sportsbet.engine import scan
 from sportsbet.pricing import american_to_decimal, expected_value, fair_prob_from_two_way, implied_prob
 from sportsbet.providers import nflverse
 from sportsbet.store import Store
+from test_pushchart import synthetic_chart
 
 KICK = datetime(2025, 10, 5, 17, 0, tzinfo=timezone.utc)
 OPEN = KICK - timedelta(days=2)  # early pull, bets placed right after it
@@ -73,6 +74,19 @@ SCHEDULE = pd.DataFrame(
 )
 
 
+@pytest.fixture(autouse=True)
+def _offline_push_chart(monkeypatch):
+    # scan and tracking load the cached chart on first need; pin a synthetic one offline
+    monkeypatch.setattr(pushchart, "_default", synthetic_chart())
+
+
+def _converted(price_home: float, price_away: float, point: float) -> float:
+    """Pinnacle BUF -7 two-way, converted to BUF at `point` through the pinned chart."""
+    chart = pushchart.default_chart()
+    fair_line = chart.fair_spread_from_prob(-7.0, fair_prob_from_two_way(price_home, price_away)[0])
+    return chart.cover_prob(fair_line, point, "home")
+
+
 @pytest.fixture
 def store(tmp_path):
     s = Store(tmp_path / "t.duckdb")
@@ -115,8 +129,10 @@ def test_add_bet_from_candidate_and_manual(store, placed):
     assert ml["source"] == "manual" and pd.isna(ml["point"])
     assert ml["fair_prob"] == pytest.approx(fair_prob_from_two_way(-300, 250)[1])
     assert b.loc[placed["total"].bet_id, "fair_prob"] == pytest.approx(0.5)
-    # nothing references BUF -7.5, so no fair prob at the time of the bet
-    assert pd.isna(b.loc[placed["moved"].bet_id, "fair_prob"])
+    # nothing quotes BUF -7.5, so its fair prob is converted from Pinnacle -7 as the scan would
+    moved = b.loc[placed["moved"].bet_id]
+    assert moved["fair_prob"] == pytest.approx(_converted(-105, -105, -7.5))
+    assert moved["fair_source"] == "pinnacle@-7.0"
     assert len(store.open_bets()) == 4
     assert len({p.bet_id for p in placed.values()}) == 4
 
@@ -161,8 +177,10 @@ def test_capture_closing(store, placed):
 
     moved = b.loc[placed["moved"].bet_id]
     assert moved["closing_price"] == -110 and moved["closing_point"] == -8
-    assert pd.isna(moved["closing_fair_prob"])
-    assert "book closed at -8" in moved["note"] and "no reference line at -7.5" in moved["note"]
+    # CLV stays on the bet's own number: Pinnacle's closing -7 converted to -7.5
+    assert moved["closing_fair_prob"] == pytest.approx(_converted(-120, 100, -7.5))
+    assert moved["closing_fair_source"] == "pinnacle@-7.0"
+    assert moved["note"] == "book closed at -8, bet at -7.5"
 
     # captured bets are not re-captured
     assert tracking.capture_closing(store, now=KICK + timedelta(hours=3)) == 0
@@ -197,25 +215,22 @@ def test_settle_with_monkeypatched_schedule(store, placed, monkeypatch):
     assert overall["stake"] == 5
     assert overall["pnl"] == pytest.approx(-3 + 100 / 105)
     assert overall["roi"] == pytest.approx((-3 + 100 / 105) / 5)
-    assert overall["clv_n"] == 3
+    assert overall["clv_n"] == 4
 
-    p_spread = fair_prob_from_two_way(-120, 100)[0]
-    p_ml = fair_prob_from_two_way(-350, 290)[1]
-    p_over = fair_prob_from_two_way(-125, 105)[0]
-    clv = [p_spread - 0.5, p_ml - fair_prob_from_two_way(-300, 250)[1], p_over - 0.5]
-    assert overall["clv_pp"] == pytest.approx(100 * sum(clv) / 3)
-    beats = [implied_prob(-110) < p_spread, implied_prob(280) < p_ml, implied_prob(-105) < p_over]
-    assert overall["beat_close"] == pytest.approx(sum(beats) / 3)
-    evs = [expected_value(p_spread, -110), expected_value(p_ml, 280), expected_value(p_over, -105)]
-    assert overall["ev_close"] == pytest.approx(sum(evs) / 3)
-    cents = [
-        tracking.cents(-110) - tracking.cents(tracking.american_exact(p_spread)),
-        tracking.cents(280) - tracking.cents(tracking.american_exact(p_ml)),
-        tracking.cents(-105) - tracking.cents(tracking.american_exact(p_over)),
+    # (price taken, fair at the bet, fair at the close) per bet; the Caesars bet is converted
+    legs = [
+        (-110, 0.5, fair_prob_from_two_way(-120, 100)[0]),
+        (280, fair_prob_from_two_way(-300, 250)[1], fair_prob_from_two_way(-350, 290)[1]),
+        (-105, 0.5, fair_prob_from_two_way(-125, 105)[0]),
+        (-105, _converted(-105, -105, -7.5), _converted(-120, 100, -7.5)),
     ]
-    assert overall["clv_cents"] == pytest.approx(sum(cents) / 3)
+    assert overall["clv_pp"] == pytest.approx(100 * sum(c - f for _, f, c in legs) / 4)
+    assert overall["beat_close"] == pytest.approx(sum(implied_prob(p) < c for p, _, c in legs) / 4)
+    assert overall["ev_close"] == pytest.approx(sum(expected_value(c, p) for p, _, c in legs) / 4)
+    cents = [tracking.cents(p) - tracking.cents(tracking.american_exact(c)) for p, _, c in legs]
+    assert overall["clv_cents"] == pytest.approx(sum(cents) / 4)
 
-    assert report.loc["Caesars", "bets"] == 1 and report.loc["Caesars", "clv_n"] == 0
+    assert report.loc["Caesars", "bets"] == 1 and report.loc["Caesars", "clv_n"] == 1
     assert report.loc["BetMGM", "bets"] == 3
     assert report.loc["h2h", "pnl"] == -2.0
 

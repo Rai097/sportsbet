@@ -28,7 +28,7 @@ from typing import Any
 import pandas as pd
 
 from sportsbet.config import TARGET_BOOKS, load_settings
-from sportsbet.engine import fair_probs_for_market
+from sportsbet.engine import converted_fair_prob_for, fair_probs_for_market
 from sportsbet.pricing import american_to_decimal, expected_value, implied_prob
 from sportsbet.providers import nflverse
 from sportsbet.store import Store
@@ -124,13 +124,21 @@ def market_slice(rows: pd.DataFrame, market: str, outcome: str, point: float | N
 def fair_prob_for_bet(
     snapshot: pd.DataFrame, market: str, outcome: str, point: float | None
 ) -> tuple[float, str] | None:
-    """Reference fair prob of the bet's side in one odds pull, or None if no reference quotes it."""
+    """Reference fair prob of the bet's side in one odds pull, or None if no reference prices it.
+
+    A reference quoting the bet's own point is de-vigged directly. Otherwise a spread or
+    total is converted through the push chart from the nearest reference line, exactly as
+    the scan does, so a bet logged from a converted candidate (fair_source "pinnacle@-7.0")
+    gets a closing fair prob on the same basis as its opening one.
+    """
     if snapshot.empty:
         return None
     res = fair_probs_for_market(market_slice(snapshot, market, outcome, point))
-    if res is None or outcome not in res[0]:
+    if res is not None and outcome in res[0]:
+        return float(res[0][outcome]), res[1]
+    if point is None:
         return None
-    return float(res[0][outcome]), res[1]
+    return converted_fair_prob_for(snapshot, market, outcome, point)
 
 
 def american_exact(p: float) -> float:
@@ -277,9 +285,9 @@ def capture_closing(store: Store, now: Any = None) -> int:
     """Fill closing price/point/fair prob for open bets whose game has kicked off.
 
     Closing price and point are the book's last quote on that side before kickoff. The
-    closing fair prob is de-vigged from the last pull before kickoff at the bet's own
-    point; if the reference no longer quotes that point it stays null with a note, because
-    a fair prob at a different number is a different bet.
+    closing fair prob is for the bet's own point in the last pull before kickoff: de-vigged
+    when a reference quotes that point, else converted through the push chart from the
+    nearest reference line. It stays null with a note only when neither is possible.
     """
     now = _utc(now or datetime.now(timezone.utc))
     captured = 0

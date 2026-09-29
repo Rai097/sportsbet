@@ -76,6 +76,8 @@ def free_data(monkeypatch):
     monkeypatch.setattr(report.nflverse, "load_schedules", lambda seasons: history()[lambda d: d["season"].isin(seasons)])
     monkeypatch.setattr(report.nflverse, "load_injuries", official_injuries)
     monkeypatch.setattr(report.nflverse, "load_depth_charts", depth_charts)
+    # the QB model needs nflverse player stats; tests that want gaps patch this themselves
+    monkeypatch.setattr(report, "load_qb_gaps", offline)
 
 
 @pytest.fixture
@@ -160,3 +162,21 @@ def test_unchanged_report_is_not_rewritten(settings, free_data, tmp_path):
     later = report.gather(store, settings, now=NOW.replace(minute=30))
     assert report.write_report(report.render(later), later, out, only_if_changed=True) is None
     assert report.write_report(report.render(later), later, out) is not None
+
+
+def test_scan_and_report_agree_on_model_probs(settings, free_data, monkeypatch):
+    """cli.scan and the report price injuries the same way, QB value gap included."""
+    from sportsbet import cli
+
+    monkeypatch.setattr(report, "load_qb_gaps", lambda season, sched, depth: {("BUF", "Josh Allen"): 2.0})
+    monkeypatch.setattr(report, "utcnow", lambda: NOW)
+    store = Store(settings.db_path)
+    store.insert_rows("odds_snapshots", fixture_rows())
+    data = report.gather(store, settings, now=NOW, min_ev=-1.0)
+    # 2.0 value gap x 0.9 points per value, not the flat 3.8
+    assert "Josh Allen (QB, Out) -1.8" in report.render(data)
+    from_report = {(c.event_id, c.outcome): c.model_prob for c in data.candidates if c.model_prob is not None}
+    from_cli = cli._model_probs(store, store.latest_odds(), use_injuries=True)
+    assert from_report and all(from_cli[k] == pytest.approx(v) for k, v in from_report.items())
+    no_inj = cli._model_probs(store, store.latest_odds(), use_injuries=False)
+    assert no_inj[("evt1", "BUF")] > from_cli[("evt1", "BUF")]  # Allen out costs BUF

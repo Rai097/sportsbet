@@ -29,6 +29,7 @@ from sportsbet.model.injuries import (
     starters_from_depth_chart,
     team_impacts,
 )
+from sportsbet.model.qb import QbEloModel, load_qb_game_values, qb_injury_gaps
 from sportsbet.providers import nflverse
 from sportsbet.providers.espn import fetch_espn_injuries
 from sportsbet.providers.odds_api import OddsApiClient
@@ -115,13 +116,22 @@ def _num(x) -> str:
     return "" if x is None or pd.isna(x) else f"{round(float(x), 1) + 0.0:+.1f}"
 
 
+def load_qb_gaps(season: int, sched: pd.DataFrame, depth: pd.DataFrame) -> dict[tuple[str, str], float]:
+    """(team, QB1) -> value over the next QB up, so a QB injury is priced by who replaces him."""
+    seasons = list(range(season - HISTORY_SEASONS, season + 1))
+    qb_model = QbEloModel.from_game_values(load_qb_game_values(seasons, sched)).fit(sched)
+    return qb_injury_gaps(qb_model, depth)
+
+
 def injury_impacts(
-    store: Store, season: int, week: int | None, now: datetime
+    store: Store, season: int, week: int | None, now: datetime, sched: pd.DataFrame | None = None
 ) -> tuple[dict[str, InjuryImpact], str]:
     """Per-team point impact from the freshest injury source available.
 
     The live ESPN snapshot wins when recent; otherwise the official nflverse report for
-    this week (or last week, before this week's report is published).
+    this week (or last week, before this week's report is published). A QB is priced by
+    his value gap to the backup when the QB model can rate both, else the flat weight.
+    This is the one place injury points are computed, so `scan` and the report agree.
     """
     espn_at = store.latest_fetch_time("injuries", source="espn")
     if espn_at is not None and now - espn_at <= ESPN_FRESH_FOR:
@@ -136,13 +146,20 @@ def injury_impacts(
         if inj.empty and week > 1:
             inj = from_nflverse_report(report, season, week - 1)
             source = f"official report, week {week - 1} (week {week} not out yet)"
+    starters, qb_gaps = None, None
     try:
-        starters = starters_from_depth_chart(nflverse.load_depth_charts([season]), season, week)
+        depth = nflverse.load_depth_charts([season])
+        starters = starters_from_depth_chart(depth, season, week)
     except Exception as exc:  # without depth charts everyone counts as a starter
         log.warning("depth charts unavailable: %s", exc)
-        starters = None
         source += "; depth charts unavailable, all listed players treated as starters"
-    return team_impacts(inj, starters), source
+    else:
+        try:
+            qb_gaps = load_qb_gaps(season, sched if sched is not None else load_history(season), depth)
+        except Exception as exc:  # player stats are best-effort; the flat QB weight still applies
+            log.warning("QB values unavailable, flat QB weight: %s", exc)
+            source += "; QB values unavailable, flat QB weight"
+    return team_impacts(inj, starters, qb_gaps=qb_gaps), source
 
 
 def model_probs(
@@ -224,7 +241,7 @@ def gather(
             data.model_note = f"Model unavailable ({exc}); showing market-only numbers."
 
     try:
-        data.impacts, data.injuries_source = injury_impacts(store, season, data.week, now)
+        data.impacts, data.injuries_source = injury_impacts(store, season, data.week, now, sched)
     except Exception as exc:
         log.warning("injuries unavailable: %s", exc)
         data.injuries_note = f"Not available: {exc}"

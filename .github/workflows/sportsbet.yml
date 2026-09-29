@@ -87,10 +87,13 @@ jobs:
           fi
 
       # nflreadpy refreshes its own files after 24h, so one cache entry per day is enough.
+      # The fitted push chart rides along; without it every tick with odds refits it.
       - name: Restore nflreadpy cache
         uses: actions/cache@v4
         with:
-          path: data/cache/nflreadpy
+          path: |
+            data/cache/nflreadpy
+            data/cache/pushchart.json
           key: nflreadpy-${{ steps.when.outputs.day }}
           restore-keys: nflreadpy-
 

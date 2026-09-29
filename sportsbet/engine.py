@@ -15,6 +15,7 @@ from __future__ import annotations
 import logging
 from dataclasses import dataclass
 from datetime import datetime, timezone
+from types import SimpleNamespace
 from typing import Any
 
 import pandas as pd
@@ -149,6 +150,28 @@ def converted_fair_prob(
     fair_total = chart.fair_total_from_prob(hp, p_first)
     p_over = chart.over_prob(fair_total, float(row.point))
     return (p_over if row.outcome == "Over" else 1.0 - p_over), f"{source}@{hp:.1f}"
+
+
+def converted_fair_prob_for(
+    rows: pd.DataFrame, market: str, outcome: str, point: float, chart: PushChart | None = None
+) -> tuple[float, str] | None:
+    """Push-chart fair probability of one side at `point`, from one event's reference lines.
+
+    The same conversion the scan applies to a target row, for callers holding a side
+    rather than a row (bet tracking prices a bet and its close at the bet's own number).
+    """
+    if market not in ("spreads", "totals"):
+        return None
+    ref = rows[(rows["market"] == market) & rows["point"].notna() & ~rows["bookmaker"].isin(TARGET_BOOKS)]
+    if ref.empty:
+        return None
+    chart = chart or _load_chart()
+    if chart is None:
+        return None
+    ref = ref.assign(home_point=[_home_point(r) for r in ref.itertuples(index=False)])
+    first = ref.iloc[0]
+    side = SimpleNamespace(market=market, outcome=outcome, point=float(point), home_team=first.home_team)
+    return converted_fair_prob(ref, side, chart)
 
 
 def _load_chart() -> PushChart | None:
