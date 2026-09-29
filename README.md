@@ -125,6 +125,19 @@ sportsbet/
 tests/               unit tests plus recorded API fixtures
 ```
 
+## Live status (first real runs, 2026-09-29)
+
+- Odds pull works: 16 week-4 games, Pinnacle and BetMGM on every game, 3 credits per pull.
+- **Caesars is not in the feed.** A live probe of the us and us2 regions returned 17
+  bookmaker keys for NFL and none for Caesars or William Hill. The key stays configured so
+  it is picked up if it returns; the report says explicitly when a target book has no
+  lines. Other soft books the feed does carry (FanDuel, DraftKings, BetRivers, Hard Rock,
+  Bally Bet, theScore Bet, Fliff, betPARX) can be targeted with
+  `SPORTSBET_TARGET_BOOKS=betmgm,fanduel,...` at no extra credit cost up to 10 books.
+- ESPN injuries work from GitHub's runners only through `site.web.api.espn.com`; the
+  `site.api.espn.com` host answers 403 to datacenter IPs. `python -m sportsbet probe`
+  (workflow input `probe`) re-tests both questions for 2 credits.
+
 ## Known limits and next steps
 
 - Cross-point spreads and totals (a Caesars -7.5 against Pinnacle's -7) are priced through
