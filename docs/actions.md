@@ -2,7 +2,8 @@
 
 No server needed. `.github/workflows/sportsbet.yml` runs a tick every hour from Wednesday
 through Monday (UTC). Each tick decides on its own whether to spend Odds API credits, pulls
-the free ESPN injuries feed, re-scans for +EV prices and commits a fresh report to the repo.
+the free ESPN injuries feed, builds alerts, re-scans for +EV prices and commits a fresh
+report to the repo.
 
 ### One-time setup
 
@@ -32,7 +33,8 @@ the free ESPN injuries feed, re-scans for +EV prices and commits a fresh report 
   run's page under Actions.
 
 A report has: quota status and the next planned pull, +EV candidates at BetMGM and
-Caesars, the week's slate with market line vs model line, per-team injury impact, and when
+Caesars, alerts from the last 24 hours (injury news or a reference move a target book has
+not matched), the week's slate with market line vs model line, per-team injury impact, and when
 the odds and injuries were last fetched. Prices move, so check the book before betting.
 
 ### What it spends

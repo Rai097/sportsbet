@@ -1,13 +1,13 @@
 """Markdown report and the unattended `run-tick` job behind the GitHub Actions workflow.
 
 `sportsbet report` renders what a person wants on their phone: quota status, the week's
-slate (market line vs model line), +EV candidates from the latest stored odds, injury
-impact per team, and how fresh the data is. Every section degrades to a short
+slate (market line vs model line), +EV candidates from the latest stored odds, alerts
+from the last day, injury impact per team, and how fresh the data is. Every section degrades to a short
 "not available" note instead of failing, because the report is the only output of an
 unattended run and an empty store (no API key yet) is a normal state.
 
 `sportsbet run-tick` is one scheduled tick: maybe spend credits on odds (schedule.py
-decides), always try the free ESPN injuries feed, then scan and write the report.
+decides), always try the free ESPN injuries feed, build alerts, then scan and write the report.
 """
 
 from __future__ import annotations
@@ -19,6 +19,7 @@ from pathlib import Path
 
 import pandas as pd
 
+from sportsbet import alerts as alerts_mod
 from sportsbet.config import Settings, load_settings
 from sportsbet.engine import Candidate, format_candidates, scan
 from sportsbet.model.elo import EloModel
@@ -42,6 +43,7 @@ HISTORY_SEASONS = 6  # seasons of results the Elo fit consumes, same as `sportsb
 ESPN_FRESH_FOR = timedelta(hours=48)  # older than this, fall back to the official report
 GENERATED_PREFIX = "_Generated "  # the one line allowed to differ between identical reports
 CREDITS_PER_PULL = 3
+ALERTS_FOR = timedelta(hours=24)  # alerts older than this are news the books have absorbed
 
 
 @dataclass
@@ -61,6 +63,7 @@ class ReportData:
     injuries_note: str | None = None
     odds_fetched_at: datetime | None = None
     injuries_fetched_at: datetime | None = None
+    alerts: list[alerts_mod.Alert] = field(default_factory=list)
 
 
 def utcnow() -> datetime:
@@ -254,6 +257,7 @@ def gather(
             data.slate_note = f"Not available: {exc}"
 
     data.quota = quota_lines(store, settings, now, cur)
+    data.alerts = recent_alerts(store, now)
     data.odds_fetched_at = store.latest_fetch_time("odds_snapshots")
     data.injuries_fetched_at = store.latest_fetch_time("injuries")
 
@@ -275,6 +279,17 @@ def gather(
         data.model_note = "Model unavailable (no schedule history); market-only scan."
     data.candidates = scan(odds, min_ev=data.min_ev, kelly_frac=settings.kelly_fraction, model_probs=probs)
     return data
+
+
+def recent_alerts(store: Store, now: datetime) -> list[alerts_mod.Alert]:
+    """Alerts emitted in the last day for games not yet started, high priority first."""
+    df = store.query(
+        "SELECT * FROM alerts WHERE created_at >= ? AND commence_time > ? "
+        "ORDER BY priority <> 'high', commence_time, matchup, bookmaker, market",
+        [now - ALERTS_FOR, now],
+    )
+    rows = df.astype(object).where(df.notna(), None).to_dict("records")
+    return [alerts_mod.Alert(**r) for r in rows]
 
 
 def _md_table(df: pd.DataFrame) -> str:
@@ -312,6 +327,14 @@ def render(data: ReportData) -> str:
         out += ["", "```", format_candidates(data.candidates), "```"]
     if data.model_note:
         out += ["", data.model_note]
+    out.append("")
+
+    out += ["## Alerts (last 24h)", ""]
+    if data.alerts:
+        out.append("Injury news or a reference move the target book has not matched yet. Check the price first.")
+        out += ["", "```", alerts_mod.format_alerts(data.alerts), "```"]
+    else:
+        out.append("No alerts in the last 24 hours.")
     out.append("")
 
     out += ["## This week's slate", ""]
@@ -403,6 +426,14 @@ def cmd_run_tick(args) -> int:
         print(f"ESPN injuries: stored {len(rows)} rows")
     except Exception as exc:  # free and unofficial: a failure must not stop the tick
         print(f"ESPN injuries skipped: {exc}")
+
+    try:
+        new = alerts_mod.build_alerts(
+            store, starters=alerts_mod.load_starters(), qb_gaps=alerts_mod.load_qb_gaps(), now=now
+        )
+        print(f"alerts: {len(new)} new")
+    except Exception as exc:  # alerts are extra; the report must still be written
+        print(f"alerts skipped: {exc}")
 
     data = gather(store, settings, now=now, sched=sched, min_ev=args.min_ev)
     if pulled:

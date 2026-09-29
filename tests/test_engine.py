@@ -118,6 +118,29 @@ def test_flipped_sign_is_not_treated_as_same_point():
     assert buf.fair_prob > 0.75
 
 
+def test_books_straddling_pickem_are_not_mixed():
+    """Home -1 and home +1 share abs(point) but are different bets; neither may price the other."""
+    df = _odds_df()
+    df = df[(df.event_id == "evt1") & (df.market == "spreads") & (df.bookmaker != "williamhill_us")].copy()
+    home = df.outcome == "BUF"
+    df.loc[home, "point"], df.loc[~home, "point"] = -1.0, 1.0  # BUF -1 / NE +1 everywhere
+    mgm = df[df.bookmaker == "betmgm"].assign(price=[-105.0, -115.0])
+    dk = df[df.bookmaker == "pinnacle"].assign(bookmaker="draftkings", price=[-110.0, -110.0])
+    # FanDuel has flipped the favourite: BUF +1 -150 / NE -1 +130 is a much better BUF bet
+    fd = dk.assign(bookmaker="fanduel", point=[1.0, -1.0], price=[-150.0, 130.0])
+    pin = dk.assign(bookmaker="pinnacle", point=[1.0, -1.0], price=[-150.0, 130.0])
+
+    buf = _find(scan(pd.concat([mgm, dk, fd]), min_ev=-1.0), "betmgm", "spreads", "BUF")
+    assert buf.fair_source == "consensus(1)" and buf.fair_prob == pytest.approx(0.5)
+
+    # Pinnacle on the other side of zero is converted, never de-vigged as if it were BUF -1
+    buf = _find(scan(pd.concat([mgm, dk, pin]), min_ev=-1.0), "betmgm", "spreads", "BUF")
+    assert buf.fair_source == "consensus(1)"
+    buf = _find(scan(pd.concat([mgm, pin]), min_ev=-1.0), "betmgm", "spreads", "BUF")
+    assert buf.fair_source == "pinnacle@+1.0"
+    assert buf.fair_prob < fair_prob_from_two_way(-150, 130)[0]
+
+
 def test_scan_without_push_chart_skips_conversion(monkeypatch):
     monkeypatch.setattr(pushchart, "_default", None)
 

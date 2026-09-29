@@ -100,7 +100,7 @@ def _home_point(row: Any) -> float:
 
 
 def _reference_has_point(grp: pd.DataFrame, row: Any) -> bool:
-    """Guard the abs(point) grouping: home -1 and home +1 share a key but are different bets."""
+    """True when a reference quotes this row's own side and point (h2h always qualifies)."""
     if pd.isna(row.point):
         return True
     refs = grp[~grp["bookmaker"].isin(TARGET_BOOKS) & (grp["outcome"] == row.outcome)]
@@ -199,12 +199,15 @@ def scan(
     if odds.empty:
         return []
     odds = odds.copy()
-    odds["point_key"] = odds["point"].fillna(0.0)
-    # spreads are symmetric: home -3 pairs with away +3, so key spreads on abs(point)
-    odds.loc[odds["market"] == "spreads", "point_key"] = odds.loc[odds["market"] == "spreads", "point"].abs()
     lined = odds["market"].isin(["spreads", "totals"]) & odds["point"].notna()
     odds["home_point"] = float("nan")
     odds.loc[lined, "home_point"] = [_home_point(r) for r in odds[lined].itertuples(index=False)]
+    odds["point_key"] = odds["point"].fillna(0.0)
+    # home -3 pairs with away +3, so key spreads on the home point. Not abs(point): near a
+    # pick'em one book's home -1 and another's home +1 are different bets, and averaging
+    # them (or pricing one off Pinnacle's other) would invent an edge.
+    spreads = odds["market"] == "spreads"
+    odds.loc[spreads, "point_key"] = odds.loc[spreads, "home_point"]
     ref_rows = odds[lined & ~odds["bookmaker"].isin(TARGET_BOOKS)]
     refs_by_market = {k: g for k, g in ref_rows.groupby(["event_id", "market"], sort=False)}
 

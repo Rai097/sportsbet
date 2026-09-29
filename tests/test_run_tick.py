@@ -68,6 +68,7 @@ def test_scheduled_pull_logs_scans_and_reports(env, monkeypatch, capsys):
     latest = (out / "latest.md").read_text()
     assert "BetMGM" in latest and "API credits remaining 497" in latest
     assert "ESPN live feed" in latest
+    assert "alerts: 0 new" in capsys.readouterr().out  # one odds pull is a baseline, not news
     files = list((out / "2026-wk06").glob("*.md"))
     assert len(files) == 1
 
@@ -102,3 +103,23 @@ def test_schedule_outage_still_exits_zero(env, monkeypatch, capsys):
     assert calls == []
     assert "schedule unavailable" in capsys.readouterr().out
     assert (out / "latest.md").exists()
+
+
+def test_tick_builds_alerts_into_the_report(env, capsys):
+    """Unattended runs never call `alerts`, so run-tick must build them for the report to show."""
+    from test_alerts import _injuries, _spreads
+
+    settings, out, calls = env
+    store = Store(settings.db_path)
+    store.insert_rows("injuries", _injuries(THU_SLOT - timedelta(minutes=40), "Questionable"))
+    store.insert_rows("injuries", _injuries(THU_SLOT - timedelta(minutes=20), "Out"))
+    for mins, pin in ((50, -7.0), (10, -5.5)):
+        at = THU_SLOT - timedelta(minutes=mins)
+        store.insert_rows("odds_snapshots", _spreads(at, "pinnacle", pin, -104, -106))
+        store.insert_rows("odds_snapshots", _spreads(at, "betmgm", -7.0))
+    store.close()
+
+    assert run(out) == 0
+    assert "alerts: 1 new" in capsys.readouterr().out
+    latest = (out / "latest.md").read_text()
+    assert "[HIGH  ] NE @ BUF   BetMGM  spreads NE +7 (-110)  Josh Allen (BUF QB) Questionable -> Out" in latest

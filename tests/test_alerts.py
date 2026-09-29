@@ -127,11 +127,33 @@ def test_backup_qb_change_is_only_a_stale_line(store):
     assert alerts[0].trigger == "stale_line" and alerts[0].side == "NE"
 
 
+def test_qb_change_priced_by_gap_like_the_report(store):
+    """Alerts and the report must agree on what a QB is worth: his gap to the backup when known."""
+    import pandas as pd
+
+    from sportsbet.model.injuries import QB_POINTS_PER_VALUE, team_impacts
+
+    _seed(store)
+    gaps = {("BUF", "Josh Allen"): 6.0}
+    c = injury_changes(store, starters=STARTERS, qb_gaps=gaps)[0]
+    assert c.impact == pytest.approx(6.0 * QB_POINTS_PER_VALUE * (1.0 - 0.35), abs=1e-3)
+    # the alert's impact is exactly the change in the report's team impact for that player
+    times = store.injury_snapshot_times("espn")
+    allen = [store.injury_snapshot(t, "espn").query("player == 'Josh Allen'") for t in times]
+    before, after = (team_impacts(pd.DataFrame(a), STARTERS, qb_gaps=gaps)["BUF"].points for a in allen)
+    assert c.impact == pytest.approx(after - before, abs=1e-3)
+
+    # a backup nearly as good as the starter is not a high-priority injury
+    alerts = build_alerts(store, starters=STARTERS, window_minutes=120, qb_gaps={("BUF", "Josh Allen"): 0.5})
+    assert [a.priority for a in alerts] == ["medium"]
+
+
 FIX_WATCH = Path(__file__).parent / "fixtures" / "watch"
 
 
 def _watcher(store, **kw):
     lines: list[str] = []
+    kw.setdefault("qb_gaps_loader", lambda: None)
     w = Watcher(store=store, settings=Settings(odds_api_key=None), starters_loader=lambda: {("BUF", "Josh Allen")},
                 emit=lines.append, **kw)
     return w, lines
@@ -151,6 +173,13 @@ def test_poller_two_ticks_offline(store):
     w.run(interval=0)
     assert lines[-1].strip() == "no new alerts"
     assert len(store.query("SELECT * FROM alerts")) == len(alerts)
+
+
+def test_poller_passes_qb_gaps_to_alerts(store):
+    w, lines = _watcher(store, fixtures=fixture_ticks(FIX_WATCH), qb_gaps_loader=lambda: {("BUF", "Josh Allen"): 0.3})
+    w.run(interval=0, max_ticks=2)
+    alerts = store.query("SELECT * FROM alerts")
+    assert "high" not in set(alerts["priority"])
 
 
 def test_poller_without_api_key_skips_odds(store, monkeypatch):

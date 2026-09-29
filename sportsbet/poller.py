@@ -22,7 +22,7 @@ from typing import Any
 
 import requests
 
-from sportsbet.alerts import Alert, add_alert_args, build_alerts, format_alerts, load_starters
+from sportsbet.alerts import Alert, add_alert_args, build_alerts, format_alerts, load_qb_gaps, load_starters
 from sportsbet.config import Settings, load_settings
 from sportsbet.providers.espn import fetch_espn_injuries, parse_espn_injuries
 from sportsbet.providers.odds_api import OddsApiClient, load_fixture, normalize
@@ -75,16 +75,19 @@ class Watcher:
     fixtures: list[FixtureTick] | None = None
     client: OddsApiClient | None = None
     starters_loader: Callable[[], set[tuple[str, str]] | None] = load_starters
+    qb_gaps_loader: Callable[[], dict[tuple[str, str], float] | None] = load_qb_gaps
     alert_kwargs: dict[str, Any] = field(default_factory=dict)
     emit: Callable[[str], None] = print
     _starters: set[tuple[str, str]] | None = None
     _starters_day: date | None = None
+    _qb_gaps: dict[tuple[str, str], float] | None = None
     _warned_no_key: bool = False
 
     def starters(self, now: datetime) -> set[tuple[str, str]] | None:
         # depth charts change weekly at most; one load per day keeps ticks fast
         if self._starters_day != now.date():
             self._starters = self.starters_loader()
+            self._qb_gaps = self.qb_gaps_loader()
             self._starters_day = now.date()
         return self._starters
 
@@ -135,7 +138,8 @@ class Watcher:
     def tick(self, tick: int) -> list[Alert]:
         now = datetime.now(timezone.utc)
         parts = [self.pull_injuries(tick), self.pull_odds(tick, now)]
-        new = build_alerts(self.store, starters=self.starters(now), **self.alert_kwargs)
+        starters = self.starters(now)
+        new = build_alerts(self.store, starters=starters, qb_gaps=self._qb_gaps, **self.alert_kwargs)
         self.emit(f"[{now:%Y-%m-%d %H:%M:%SZ}] tick {tick + 1}: " + "; ".join(parts))
         self.emit(format_alerts(new) if new else "  no new alerts")
         return new
@@ -176,6 +180,7 @@ def cmd_watch(args) -> int:
         fixtures=fixtures,
         client=client,
         starters_loader=(lambda: None) if args.no_depth_charts else load_starters,
+        qb_gaps_loader=(lambda: None) if args.no_depth_charts else load_qb_gaps,
         alert_kwargs={"window_minutes": args.window, "injury_lookback_hours": args.lookback, "min_impact": args.min_impact},
     )
     try:

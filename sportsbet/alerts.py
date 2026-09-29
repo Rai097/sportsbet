@@ -22,7 +22,13 @@ from typing import Any
 import pandas as pd
 
 from sportsbet.config import REFERENCE_BOOKS, SHARP_BOOK, TARGET_BOOKS, load_settings
-from sportsbet.model.injuries import BACKUP_FRACTION, STARTER_POINTS, STATUS_WEIGHT, starters_from_depth_chart
+from sportsbet.model.injuries import (
+    BACKUP_FRACTION,
+    QB_POINTS_PER_VALUE,
+    STARTER_POINTS,
+    STATUS_WEIGHT,
+    starters_from_depth_chart,
+)
 from sportsbet.pricing import devig_power, expected_value, implied_prob
 from sportsbet.store import Store
 
@@ -132,6 +138,7 @@ def _diff_snapshots(
     source: str,
     prev_at: datetime,
     cur_at: datetime,
+    qb_gaps: dict[tuple[str, str], float] | None = None,
 ) -> list[InjuryChange]:
     prev_rows = {(r.team, r.player): r for r in prev.itertuples(index=False)}
     cur_rows = {(r.team, r.player): r for r in cur.itertuples(index=False)}
@@ -151,6 +158,9 @@ def _diff_snapshots(
         pos = row.position if isinstance(row.position, str) else None
         starter = None if starters is None else key in starters
         base = STARTER_POINTS.get((pos or "").upper(), 0.0)
+        if (pos or "").upper() == "QB" and qb_gaps and key in qb_gaps:
+            # priced by who replaces him, exactly as injuries.team_impacts does for the report
+            starter, base = True, max(qb_gaps[key], 0.0) * QB_POINTS_PER_VALUE
         impact = base * (_weight(new) - _weight(old)) * (BACKUP_FRACTION if starter is False else 1.0)
         out.append(
             InjuryChange(
@@ -175,6 +185,7 @@ def injury_changes(
     since: datetime | None = None,
     starters: set[tuple[str, str]] | None = None,
     source: str | None = None,
+    qb_gaps: dict[tuple[str, str], float] | None = None,
 ) -> list[InjuryChange]:
     """Status changes between consecutive injury snapshots, largest impact first.
 
@@ -182,7 +193,8 @@ def injury_changes(
     every consecutive pair whose newer snapshot is after `since` is diffed, so a change
     stays visible for a while even when injuries are polled far more often than odds.
     Snapshots are compared per source because ESPN and the official report differ in
-    naming and coverage.
+    naming and coverage. qb_gaps (see load_qb_gaps) prices a starting QB by his value
+    over the next man up instead of the flat weight.
     """
     sources = [source] if source else store.query("SELECT DISTINCT source FROM injuries")["source"].tolist()
     out: list[InjuryChange] = []
@@ -192,13 +204,15 @@ def injury_changes(
             continue  # the first snapshot is a baseline, not news
         if since is None:
             out += _diff_snapshots(
-                store.previous_injuries(src), store.injury_snapshot(times[-1], src), starters, src, times[-2], times[-1]
+                store.previous_injuries(src), store.injury_snapshot(times[-1], src), starters, src, times[-2], times[-1],
+                qb_gaps,
             )
             continue
         for prev_at, cur_at in zip(times, times[1:]):
             if cur_at > since:
                 out += _diff_snapshots(
-                    store.injury_snapshot(prev_at, src), store.injury_snapshot(cur_at, src), starters, src, prev_at, cur_at
+                    store.injury_snapshot(prev_at, src), store.injury_snapshot(cur_at, src), starters, src, prev_at, cur_at,
+                    qb_gaps,
                 )
     out.sort(key=lambda c: (-abs(c.impact), c.team, c.player))
     return out
@@ -423,10 +437,13 @@ def build_alerts(
     min_impact: float = MIN_IMPACT,
     now: datetime | None = None,
     persist: bool = True,
+    qb_gaps: dict[tuple[str, str], float] | None = None,
 ) -> list[Alert]:
     """Alerts not emitted before, high priority first. Persists them unless persist=False."""
     now = now or _utcnow()
-    changes = injury_changes(store, since=now - timedelta(hours=injury_lookback_hours), starters=starters)
+    changes = injury_changes(
+        store, since=now - timedelta(hours=injury_lookback_hours), starters=starters, qb_gaps=qb_gaps
+    )
     hist = store.odds_history(hours=injury_lookback_hours + window_minutes / 60.0, now=now)
     alerts = _injury_alerts(changes, hist, min_impact) if not hist.empty else []
     covered = {(a.event_id, a.bookmaker, a.market, a.side) for a in alerts}
@@ -439,6 +456,7 @@ def build_alerts(
     for a in alerts:
         if a.alert_key not in seen:
             seen.add(a.alert_key)
+            a.created_at = now  # one clock for the whole build, so a caller's `now` is honoured
             new.append(a)
     new.sort(key=lambda a: (a.priority != "high", str(a.commence_time), a.matchup, a.bookmaker, a.market))
     if persist and new:
@@ -479,15 +497,30 @@ def load_starters() -> set[tuple[str, str]] | None:
         return None
 
 
+def load_qb_gaps() -> dict[tuple[str, str], float] | None:
+    """(team, QB1) -> value over the next QB up, as the report uses; None falls back to the flat weight."""
+    from sportsbet import report  # report imports this module for run-tick
+    from sportsbet.providers import nflverse
+
+    try:
+        season = nflverse.current_season()
+        return report.load_qb_gaps(season, report.load_history(season), nflverse.load_depth_charts([season]))
+    except Exception as exc:  # player stats are best-effort, same as the report
+        log.warning("QB values unavailable, flat QB weight in alerts: %s", exc)
+        return None
+
+
 def cmd_alerts(args) -> int:
     """Build alerts from stored injury and odds snapshots and print the new ones."""
     settings = load_settings()
     store = Store(args.db or settings.db_path)
     try:
         starters = None if args.no_depth_charts else load_starters()
+        qb_gaps = None if args.no_depth_charts else load_qb_gaps()
         new = build_alerts(
             store,
             starters=starters,
+            qb_gaps=qb_gaps,
             window_minutes=args.window,
             injury_lookback_hours=args.lookback,
             min_impact=args.min_impact,

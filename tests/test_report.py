@@ -180,3 +180,31 @@ def test_scan_and_report_agree_on_model_probs(settings, free_data, monkeypatch):
     assert from_report and all(from_cli[k] == pytest.approx(v) for k, v in from_report.items())
     no_inj = cli._model_probs(store, store.latest_odds(), use_injuries=False)
     assert no_inj[("evt1", "BUF")] > from_cli[("evt1", "BUF")]  # Allen out costs BUF
+
+
+def test_report_shows_recent_alerts_only(settings, free_data):
+    from datetime import timedelta
+
+    from sportsbet.alerts import Alert
+
+    kickoff = datetime(2099, 10, 4, 17, tzinfo=timezone.utc)
+
+    def alert(key, created, commence=kickoff, market="h2h", point=None):
+        return Alert(priority="high", trigger="injury:BUF:Josh Allen", event_id="evt1", commence_time=commence,
+                     matchup="NE @ BUF", bookmaker="betmgm", market=market, side="NE", point=point, price=285.0,
+                     detail=f"detail {key}", alert_key=key, created_at=created)
+
+    store = Store(settings.db_path)
+    store.insert_alerts([
+        alert("fresh", NOW - timedelta(hours=1)),
+        alert("fresh-spread", NOW - timedelta(hours=2), market="spreads", point=7.0),
+        alert("old", NOW - timedelta(days=2)),
+        alert("started", NOW - timedelta(hours=1), commence=NOW - timedelta(minutes=5)),
+    ])
+    md = report.render(report.gather(store, settings, now=NOW))
+    section = md.split("## Alerts (last 24h)")[1].split("## This week's slate")[0]
+    assert "NE ML (+285)  detail fresh" in section and "NE +7 (+285)  detail fresh-spread" in section
+    assert "detail old" not in section and "detail started" not in section
+
+    empty = report.render(report.gather(Store(settings.data_dir / "empty.duckdb"), settings, now=NOW))
+    assert "No alerts in the last 24 hours." in empty
