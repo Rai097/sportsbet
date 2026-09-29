@@ -79,8 +79,26 @@ def parse_espn_injuries(payload: dict[str, Any], fetched_at: datetime | None = N
     return rows
 
 
+# ESPN's edge returns 403 to non-browser user agents, so look like a browser.
+BROWSER_HEADERS = {
+    "User-Agent": (
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+        "(KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
+    ),
+    "Accept": "application/json, text/plain, */*",
+    "Accept-Language": "en-US,en;q=0.9",
+    "Referer": "https://www.espn.com/nfl/injuries",
+    "Origin": "https://www.espn.com",
+}
+
+
 def fetch_espn_injuries(url: str, session: requests.Session | None = None) -> list[InjuryRow]:
     session = session or requests.Session()
-    resp = session.get(url, timeout=30, headers={"User-Agent": "sportsbet/0.1"})
-    resp.raise_for_status()
+    resp = session.get(url, timeout=30, headers=BROWSER_HEADERS)
+    if resp.status_code >= 400:
+        # include a slice of the body so an unattended log shows what ESPN actually said
+        snippet = resp.text[:200].replace("\n", " ")
+        raise requests.HTTPError(
+            f"{resp.status_code} from ESPN injuries feed: {snippet!r}", response=resp
+        )
     return parse_espn_injuries(resp.json())

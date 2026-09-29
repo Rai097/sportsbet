@@ -20,7 +20,7 @@ from pathlib import Path
 import pandas as pd
 
 from sportsbet import alerts as alerts_mod
-from sportsbet.config import Settings, load_settings
+from sportsbet.config import TARGET_BOOKS, Settings, load_settings
 from sportsbet.engine import Candidate, format_candidates, scan
 from sportsbet.model.elo import EloModel
 from sportsbet.model.injuries import (
@@ -36,6 +36,8 @@ from sportsbet.providers.espn import fetch_espn_injuries
 from sportsbet.providers.odds_api import OddsApiClient
 from sportsbet.schedule import ET, MAX_PULLS_PER_WEEK, due_slot, next_slot, pulls_this_week, week_bounds
 from sportsbet.store import Store
+
+NEAR_MISSES = 5
 
 log = logging.getLogger(__name__)
 
@@ -64,6 +66,8 @@ class ReportData:
     odds_fetched_at: datetime | None = None
     injuries_fetched_at: datetime | None = None
     alerts: list[alerts_mod.Alert] = field(default_factory=list)
+    coverage: pd.DataFrame | None = None
+    near_misses: list[Candidate] = field(default_factory=list)
 
 
 def utcnow() -> datetime:
@@ -277,8 +281,22 @@ def gather(
             data.model_note = f"Model unavailable ({exc}); market-only scan."
     elif data.model_note is None:
         data.model_note = "Model unavailable (no schedule history); market-only scan."
+    data.coverage = board_coverage(odds)
     data.candidates = scan(odds, min_ev=data.min_ev, kelly_frac=settings.kelly_fraction, model_probs=probs)
+    if not data.candidates:
+        # show the scan is alive on a quiet board: the best prices even though none clear the bar
+        data.near_misses = scan(odds, min_ev=-1.0, kelly_frac=settings.kelly_fraction, model_probs=probs)[:NEAR_MISSES]
     return data
+
+
+def board_coverage(odds: pd.DataFrame) -> pd.DataFrame:
+    """Games and markets quoted per book in the latest pull, so a thin board is visible."""
+    if odds.empty:
+        return pd.DataFrame(columns=["book", "games", "markets"])
+    g = odds.groupby("bookmaker").agg(games=("event_id", "nunique"), markets=("market", lambda m: ", ".join(sorted(set(m)))))
+    g = g.reset_index().rename(columns={"bookmaker": "book"})
+    g["book"] = g["book"].map(lambda b: TARGET_BOOKS.get(b, b))
+    return g.sort_values(["games", "book"], ascending=[False, True]).reset_index(drop=True)
 
 
 def recent_alerts(store: Store, now: datetime) -> list[alerts_mod.Alert]:
@@ -325,6 +343,11 @@ def render(data: ReportData) -> str:
     else:
         out.append(f"Minimum EV {data.min_ev:.1%}. Fair price from Pinnacle, else a de-vigged consensus.")
         out += ["", "```", format_candidates(data.candidates), "```"]
+        if data.near_misses:
+            out += ["", f"Closest to +EV (top {len(data.near_misses)}, below the bar):", "", "```", format_candidates(data.near_misses), "```"]
+        if data.coverage is not None and not data.coverage.empty:
+            out += ["", "Board coverage in the latest pull:", "", "| book | games | markets |", "|---|---|---|"]
+            out += [f"| {r.book} | {r.games} | {r.markets} |" for r in data.coverage.itertuples(index=False)]
     if data.model_note:
         out += ["", data.model_note]
     out.append("")
