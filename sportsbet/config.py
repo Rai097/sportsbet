@@ -7,6 +7,21 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
+
+
+def _load_dotenv(path: Path) -> None:
+    """Minimal .env loader so a local key works without exporting it. Never overrides the shell."""
+    if not path.is_file():
+        return
+    for line in path.read_text().splitlines():
+        line = line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, _, value = line.partition("=")
+        os.environ.setdefault(key.strip(), value.strip().strip("'\""))
+
+
+_load_dotenv(PROJECT_ROOT / ".env")
 DATA_DIR = Path(os.environ.get("SPORTSBET_DATA_DIR", PROJECT_ROOT / "data"))
 
 # The Odds API bookmaker keys. Caesars is listed under its legacy William Hill key.
