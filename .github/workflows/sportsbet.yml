@@ -20,6 +20,10 @@ on:
         description: "Pull odds now (3 credits) regardless of the schedule"
         type: boolean
         default: false
+      probe:
+        description: "Diagnostics: list live bookmaker keys (2 credits) and test ESPN endpoints"
+        type: boolean
+        default: false
   push:
   pull_request:
 
@@ -101,9 +105,11 @@ jobs:
         env:
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
           FORCE_PULL: ${{ inputs.force_pull }}
+          PROBE: ${{ inputs.probe }}
         run: |
           args=()
           if [ "${FORCE_PULL}" = "true" ]; then args+=(--force-pull); fi
+          if [ "${PROBE}" = "true" ]; then python -m sportsbet probe; fi
           python -m sportsbet run-tick "${args[@]}"
 
       - name: Save DuckDB history
