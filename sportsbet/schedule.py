@@ -28,7 +28,7 @@ PRE_KICKOFF = timedelta(minutes=90)
 WINDOW_BEFORE = timedelta(minutes=30)
 WINDOW_AFTER = timedelta(minutes=60)
 INJURY_SLOTS = {2: "Wed injury report", 4: "Fri injury report"}  # weekday -> label
-INJURY_SLOT_TIME = time(12, 0)
+INJURY_SLOT_TIME = time(16, 30)  # official reports usually publish mid to late afternoon ET
 LATE_WINDOW_START = time(16, 0)
 MAX_PULLS_PER_WEEK = 6
 DAY_NAMES = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]

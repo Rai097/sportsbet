@@ -50,9 +50,9 @@ def et(s: str) -> datetime:
 
 
 EXPECTED_REGULAR = {
-    "Wed injury report": et("2026-10-07 12:00"),
+    "Wed injury report": et("2026-10-07 16:30"),
     "Thu kickoff": et("2026-10-08 18:45"),
-    "Fri injury report": et("2026-10-09 12:00"),
+    "Fri injury report": et("2026-10-09 16:30"),
     "Sun early": et("2026-10-11 11:30"),
     "Sun late": et("2026-10-11 14:55"),
     "Mon kickoff": et("2026-10-12 18:45"),

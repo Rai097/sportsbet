@@ -93,7 +93,7 @@ def test_full_report(settings, free_data, tmp_path):
     assert "# NFL +EV report: 2026 week 6" in md
     assert "NE @ BUF" in md and "LV @ KC" in md
     assert "BetMGM" in md and "pinnacle" in md
-    assert "Josh Allen (QB, Out) -5.0" in md
+    assert "Josh Allen (QB, Out) -3.8" in md
     assert "official report, week 6" in md
     assert data.candidates and any(c.model_prob is not None for c in data.candidates)
     assert "ODDS_API_KEY: **not set**" in md

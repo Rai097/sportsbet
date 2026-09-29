@@ -5,6 +5,7 @@ from pathlib import Path
 import pytest
 
 from sportsbet.alerts import build_alerts, injury_changes, stale_lines
+from sportsbet.model.injuries import STARTER_POINTS
 from sportsbet.config import Settings
 from sportsbet.poller import OddsBudget, Watcher, fixture_ticks
 from sportsbet.providers.espn import InjuryRow, parse_espn_injuries
@@ -57,7 +58,7 @@ def test_injury_changes_flags_starter_qb(store):
     c = changes[0]
     assert (c.team, c.player, c.old_status, c.new_status, c.direction) == ("BUF", "Josh Allen", "Questionable", "Out", "worse")
     assert c.starter is True
-    assert c.impact == pytest.approx(5.0 * (1.0 - 0.35))
+    assert c.impact == pytest.approx(STARTER_POINTS["QB"] * (1.0 - 0.35))
 
 
 def test_injury_changes_new_out_and_clearance(store):

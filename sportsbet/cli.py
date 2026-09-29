@@ -23,7 +23,7 @@ from sportsbet.model.injuries import (
     starters_from_depth_chart,
     team_impacts,
 )
-from sportsbet.model.qb import QbEloModel, load_qb_game_values
+from sportsbet.model.qb import QbEloModel, load_qb_game_values, qb_injury_gaps
 from sportsbet.providers import nflverse
 from sportsbet.providers.espn import fetch_espn_injuries
 from sportsbet.providers.odds_api import OddsApiClient, load_fixture, normalize
@@ -61,18 +61,22 @@ def _model_probs(store: Store, odds: pd.DataFrame, use_injuries: bool) -> dict[t
     impacts = {}
     if use_injuries:
         week = nflverse.current_week(sched[sched["season"] == season])
-        inj = store.latest_injuries()
+        inj = store.latest_injury_snapshot("espn")
         if inj.empty:
             report = nflverse.load_injuries([season])
             inj = from_nflverse_report(report, season, week)
             if inj.empty and week > 1:  # this week's report may not be out yet
                 inj = from_nflverse_report(report, season, week - 1)
+        starters, qb_gaps = None, None
         try:
-            starters = starters_from_depth_chart(nflverse.load_depth_charts([season]), season, week)
-        except Exception as exc:  # depth charts are best-effort
-            log.warning("depth charts unavailable: %s", exc)
-            starters = None
-        impacts = team_impacts(inj, starters)
+            depth = nflverse.load_depth_charts([season])
+            starters = starters_from_depth_chart(depth, season, week)
+            # Price a QB injury by the measured value gap to the next QB up, not a flat weight.
+            qb_model = QbEloModel.from_game_values(load_qb_game_values(list(range(season - 6, season + 1)), sched)).fit(sched)
+            qb_gaps = qb_injury_gaps(qb_model, depth)
+        except Exception as exc:  # depth charts and QB values are best-effort
+            log.warning("depth charts or QB values unavailable, using flat weights: %s", exc)
+        impacts = team_impacts(inj, starters, qb_gaps=qb_gaps)
     out: dict[tuple[str, str], float] = {}
     for ev in odds[["event_id", "home_team", "away_team"]].drop_duplicates().itertuples(index=False):
         adj = matchup_adjustment(impacts, ev.home_team, ev.away_team) if impacts else 0.0

@@ -38,7 +38,7 @@ the odds and injuries were last fetched. Prices move, so check the book before b
 ### What it spends
 
 Odds pulls happen about 90 minutes before the first kickoff of each game day (Thursday,
-Saturday when there are Saturday games, Sunday early, Sunday late, Monday) and at noon
+Saturday when there are Saturday games, Sunday early, Sunday late, Monday) and at 4:30pm
 Eastern on Wednesday and Friday for injury news. There are never more than 6 scheduled pulls
 in a Tuesday-to-Monday NFL week; the `pull_log` table in DuckDB is the counter.
 
