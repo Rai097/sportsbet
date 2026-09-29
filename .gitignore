@@ -6,3 +6,4 @@ data/*.duckdb
 data/*.duckdb.wal
 data/cache/
 .env
+.claude/worktrees/
