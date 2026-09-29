@@ -9,6 +9,7 @@ from datetime import date
 from pathlib import Path
 
 import pandas as pd
+import requests
 
 from sportsbet import alerts, poller
 from sportsbet import backtest as bt
@@ -40,7 +41,11 @@ def cmd_odds(args) -> int:
         rows = normalize(load_fixture(Path(args.fixture)))
     else:
         client = OddsApiClient(settings)
-        rows = client.fetch_and_normalize()
+        try:
+            rows = client.fetch_and_normalize()
+        except (requests.RequestException, RuntimeError) as exc:
+            print(f"odds pull failed: {exc}", file=sys.stderr)
+            return 1
         print(f"quota: used={client.quota.used} remaining={client.quota.remaining} last_cost={client.quota.last_cost}")
     store = _store(settings)
     n = store.insert_rows("odds_snapshots", rows)
@@ -98,7 +103,11 @@ def cmd_injuries(args) -> int:
     store = _store(settings)
     season = nflverse.current_season()
     if args.source == "espn":
-        rows = fetch_espn_injuries(settings.espn_injuries_url)
+        try:
+            rows = fetch_espn_injuries(settings.espn_injuries_url)
+        except (requests.RequestException, ValueError) as exc:
+            print(f"ESPN injuries fetch failed: {exc}", file=sys.stderr)
+            return 1
         store.insert_rows("injuries", rows)
         inj = pd.DataFrame([r.as_dict() for r in rows])
         week = None
