@@ -1,0 +1,9 @@
+{"injuries": [
+  {"id": "2", "displayName": "Buffalo Bills", "injuries": [
+    {"status": "Out", "athlete": {"displayName": "Josh Allen", "position": {"abbreviation": "QB"}}, "details": {"type": "Shoulder"}},
+    {"status": "Questionable", "athlete": {"displayName": "Some Backup", "position": {"abbreviation": "WR"}}, "details": {"type": "Hamstring"}}
+  ]},
+  {"id": "17", "displayName": "New England Patriots", "injuries": [
+    {"status": "Injured Reserve", "athlete": {"displayName": "Starting Tackle", "position": {"abbreviation": "OT"}}, "details": {"type": "Knee"}}
+  ]}
+]}

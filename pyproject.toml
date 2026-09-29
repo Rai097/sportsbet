@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sportsbet"
+version = "0.1.0"
+description = "NFL +EV bet finder targeting BetMGM and Caesars using only free data sources"
+requires-python = ">=3.10"
+dependencies = [
+    "requests>=2.31",
+    "pandas>=2.0",
+    "duckdb>=0.10",
+    "nflreadpy>=0.1.5",
+    "pyarrow>=14",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=7"]
+
+[project.scripts]
+sportsbet = "sportsbet.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["sportsbet*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
