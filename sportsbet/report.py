@@ -348,6 +348,11 @@ def render(data: ReportData) -> str:
         if data.coverage is not None and not data.coverage.empty:
             out += ["", "Board coverage in the latest pull:", "", "| book | games | markets |", "|---|---|---|"]
             out += [f"| {r.book} | {r.games} | {r.markets} |" for r in data.coverage.itertuples(index=False)]
+            present = set(data.coverage["book"])
+            missing = [name for key, name in TARGET_BOOKS.items() if name not in present]
+            if missing:
+                out += ["", f"Target books with no lines in the feed: {', '.join(sorted(set(missing)))}. "
+                        "The odds API is not carrying them for NFL right now, so nothing can be scanned there."]
     if data.model_note:
         out += ["", data.model_note]
     out.append("")
