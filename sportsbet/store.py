@@ -93,6 +93,15 @@ CREATE TABLE IF NOT EXISTS alerts (
     price DOUBLE,
     detail VARCHAR
 );
+CREATE TABLE IF NOT EXISTS pull_log (
+    pulled_at TIMESTAMPTZ,
+    slot VARCHAR,
+    forced BOOLEAN,
+    n_rows INTEGER,
+    credits_last INTEGER,
+    credits_used INTEGER,
+    credits_remaining INTEGER
+);
 """
 
 
@@ -284,3 +293,70 @@ class Store:
             sql += " WHERE created_at >= ?"
             params.append(datetime.now(timezone.utc) - timedelta(hours=hours))
         return {r[0] for r in self.con.execute(sql, params).fetchall()}
+    # --- unattended operation: paid odds pull log and report helpers ---
+
+    def log_pull(
+        self,
+        pulled_at: datetime,
+        slot: str,
+        forced: bool,
+        n_rows: int,
+        credits_last: int | None,
+        credits_used: int | None,
+        credits_remaining: int | None,
+    ) -> None:
+        """Record one paid Odds API pull. The weekly cap in schedule.py counts these rows."""
+        self._insert_df(
+            "pull_log",
+            pd.DataFrame(
+                [
+                    {
+                        "pulled_at": pulled_at,
+                        "slot": slot,
+                        "forced": forced,
+                        "n_rows": n_rows,
+                        "credits_last": credits_last,
+                        "credits_used": credits_used,
+                        "credits_remaining": credits_remaining,
+                    }
+                ]
+            ),
+        )
+
+    def pull_log(self, since: datetime | None = None) -> pd.DataFrame:
+        """Pull log rows, oldest first, with pulled_at as tz-aware UTC."""
+        df = self.con.execute(
+            "SELECT * FROM pull_log WHERE ? IS NULL OR pulled_at >= ? ORDER BY pulled_at",
+            [since, since],
+        ).df()
+        if not df.empty:
+            df["pulled_at"] = pd.to_datetime(df["pulled_at"], utc=True)
+        return df
+
+    def pull_times(self, since: datetime | None = None) -> list[datetime]:
+        df = self.pull_log(since)
+        return [] if df.empty else [t.to_pydatetime() for t in df["pulled_at"]]
+
+    def latest_fetch_time(self, table: str, source: str | None = None) -> datetime | None:
+        """Most recent fetched_at in odds_snapshots or injuries (optionally one source), UTC."""
+        where = "WHERE source = ?" if source else ""
+        df = self.con.execute(
+            f"SELECT max(fetched_at) AS t FROM {table} {where}", [source] if source else []
+        ).df()
+        t = df["t"].iloc[0]
+        return None if pd.isna(t) else pd.Timestamp(t).tz_convert("UTC").to_pydatetime()
+
+    def latest_injury_snapshot(self, source: str) -> pd.DataFrame:
+        """Only the rows of the newest fetch from one source.
+
+        latest_injuries() keeps a player forever once seen; a live feed drops players
+        when they are healthy again, so the newest snapshot alone is the current list.
+        DISTINCT guards against a snapshot stored twice double-counting a player.
+        """
+        return self.con.execute(
+            """
+            SELECT DISTINCT * FROM injuries
+            WHERE source = ? AND fetched_at = (SELECT max(fetched_at) FROM injuries WHERE source = ?)
+            """,
+            [source, source],
+        ).df()

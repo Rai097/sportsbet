@@ -13,6 +13,7 @@ import pandas as pd
 from sportsbet import alerts, poller
 from sportsbet import backtest as bt
 from sportsbet import tracking
+from sportsbet import report
 from sportsbet.config import load_settings
 from sportsbet.engine import format_candidates, scan
 from sportsbet.model.elo import EloModel
@@ -208,6 +209,8 @@ def build_parser() -> argparse.ArgumentParser:
     tracking.register(sub)
     alerts.register(sub)
     poller.register(sub)
+    report.register(sub)
+    report.register_run_tick(sub)
     return p
 
 
