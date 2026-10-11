@@ -1,6 +1,6 @@
 # NFL +EV report: 2026 week 5
 
-_Generated Sat Oct 10 21:05 ET (01:05 UTC)_
+_Generated Sun Oct 11 03:22 ET (07:22 UTC)_
 
 ## Odds API quota
 
@@ -22,7 +22,7 @@ Closest to +EV (top 5, below the bar):
 
 ```
      game   book       bet     mkt price  fair           src    EV kelly model
- SF @ SEA BetMGM       SEA     h2h  -165 62.7%      pinnacle +0.6% 0.27% 68.6%
+ SF @ SEA BetMGM       SEA     h2h  -165 62.7%      pinnacle +0.6% 0.27% 68.3%
 DEN @ LAC BetMGM       DEN     h2h  -175 63.3%      pinnacle -0.5% 0.00% 64.7%
 CLE @ NYJ BetMGM    NYJ -2 spreads  -110 51.8% pinnacle@-2.5 -1.1% 0.00%      
 IND @ PIT BetMGM       PIT     h2h  -145 58.5%      pinnacle -1.2% 0.00% 64.3%
@@ -65,48 +65,48 @@ Spreads are the home team's expected margin (+ = home favoured). `market` is the
 | Sun 10/11 13:00 | NYG @ WAS | +3.5 | -1.1 | +0.0 | -3.5 | 50% |  |
 | Sun 10/11 16:05 | DEN @ LAC | -3.5 | -0.7 | -4.2 | -0.7 | 35% |  |
 | Sun 10/11 16:25 | DET @ ARI | -5.5 | -0.4 | -3.3 | +2.2 | 38% |  |
-| Sun 10/11 16:25 | SF @ SEA | +3.0 | +0.9 | +5.4 | +2.4 | 69% |  |
+| Sun 10/11 16:25 | SF @ SEA | +3.0 | +0.8 | +5.3 | +2.3 | 68% |  |
 | Sun 10/11 20:20 | BAL @ ATL | +3.0 | +5.0 | +5.1 | +2.1 | 68% |  |
 | Mon 10/12 20:15 | BUF @ LA | +3.5 | +0.7 | +1.7 | -1.8 | 56% |  |
 
 ## Injury impact
 
-Source: ESPN live feed, fetched Sat Oct 10 21:05 ET (01:05 UTC).
+Source: ESPN live feed, fetched Sun Oct 11 03:22 ET (07:22 UTC).
 
 | team | pts | biggest losses |
 |---|---|---|
 | BAL | -6.0 | Lamar Jackson (QB, Out) -4.7; Cam Jurgens (C, Out) -0.4; Trey Hendrickson (LB, Out) -0.3 |
 | TB | -3.9 | Baker Mayfield (QB, Out) -2.8; Benjamin Morrison (CB, Out) -0.5; Antoine Winfield Jr. (S, Out) -0.3 |
 | PHI | -2.4 | DeVonta Smith (WR, Out) -0.7; Saquon Barkley (RB, Out) -0.6; Drew Kendall (C, Out) -0.4 |
-| NE | -2.3 | Carlton Davis III (CB, Out) -0.5; Christian Gonzalez (CB, Out) -0.5; Rhamondre Stevenson (RB, Questionable) -0.2 |
+| NE | -2.3 | Christian Gonzalez (CB, Out) -0.5; Carlton Davis III (CB, Out) -0.5; Dre'Mont Jones (DE, Questionable) -0.2 |
 | CHI | -2.2 | Caleb Williams (QB, Questionable) -1.9; Anthony Johnson Jr. (S, Out, backup) -0.1; Shemar Turner (DT, Out, backup) -0.1 |
 | LAC | -1.9 | Trey Lance (QB, Out, backup) -0.6; Donte Jackson (CB, Out) -0.5; Derwin James Jr. (S, Out) -0.3 |
 | DAL | -1.8 | Joey Porter Jr. (CB, Out) -0.5; DeMarvion Overshown (LB, Out) -0.3; Tyler Guyton (OT, Questionable) -0.2 |
 | WAS | -1.7 | Marcus Mariota (QB, Out, backup) -0.6; Nick Cross (S, Out) -0.3; Terry McLaurin (WR, Questionable) -0.2 |
 | NYJ | -1.7 | Breece Hall (RB, Out) -0.6; Dylan Parham (G, Out) -0.4; Kiko Mauigoa (LB, Out) -0.3 |
-| NO | -1.3 | Kaden Elliss (LB, Out) -0.3; Barion Brown (WR, Questionable) -0.2; Alvin Kamara (RB, Questionable) -0.2 |
-| CLE | -1.3 | Dillon Gabriel (QB, Out, backup) -0.6; Mason Graham (DT, Out) -0.4; Carsen Ryan (TE, Out, backup) -0.1 |
+| NO | -1.3 | Kaden Elliss (LB, Out) -0.3; Alvin Kamara (RB, Questionable) -0.2; Barion Brown (WR, Questionable) -0.2 |
+| CLE | -1.3 | Dillon Gabriel (QB, Out, backup) -0.6; Mason Graham (DT, Out) -0.4; Tylan Wallace (WR, Out, backup) -0.1 |
 | IND | -1.3 | Arden Key (DE, Out) -0.5; Jaylon Carlies (LB, Out) -0.3; Charvarius Ward (CB, Questionable) -0.2 |
-| MIN | -1.2 | Christian Darrisaw (OT, Out) -0.6; Brian O'Neill (OT, Questionable) -0.2; Justin Jefferson (WR, Questionable) -0.2 |
-| DEN | -1.2 | Riley Moss (CB, Out) -0.5; Pat Surtain II (CB, Out) -0.5; Pat Bryant (WR, Out, backup) -0.1 |
-| SF | -1.2 | Nick Bosa (DE, Out) -0.5; Marques Sigle (S, Out) -0.3; Upton Stout (CB, Questionable) -0.2 |
+| MIN | -1.2 | Christian Darrisaw (OT, Out) -0.6; Justin Jefferson (WR, Questionable) -0.2; Brian O'Neill (OT, Questionable) -0.2 |
+| DEN | -1.2 | Pat Surtain II (CB, Out) -0.5; Riley Moss (CB, Out) -0.5; Jonah Coleman (RB, Out, backup) -0.1 |
+| SF | -1.1 | Nick Bosa (DE, Out) -0.5; Marques Sigle (S, Out) -0.3; Upton Stout (CB, Questionable) -0.2 |
 | ATL | -1.1 | Za'Darius Smith (DE, Out) -0.5; Jake Matthews (OT, Questionable) -0.2; Samson Ebukam (DE, Questionable) -0.2 |
 | BUF | -0.9 | Ed Oliver (DT, Out) -0.4; Dee Alford (CB, Questionable) -0.2; DJ Moore (WR, Questionable) -0.2 |
-| PIT | -0.9 | Jamel Dean (CB, Out) -0.5; Jalen Ramsey (CB, Questionable) -0.2; DeShon Elliott (S, Out, backup) -0.1 |
-| ARI | -0.8 | Andrew Wingard (S, Out) -0.3; Isaiah Adams (G, Out, backup) -0.1; Paris Johnson Jr. (OT, Out, backup) -0.1 |
-| GB | -0.8 | Aaron Banks (G, Doubtful) -0.3; Savion Williams (WR, Out, backup) -0.1; Edgerrin Cooper (LB, Out, backup) -0.1 |
-| CAR | -0.7 | Monroe Freeling (OT, Questionable) -0.2; Trevor Etienne (RB, Out, backup) -0.1; Mike Jackson (CB, Out, backup) -0.1 |
+| PIT | -0.9 | Jamel Dean (CB, Out) -0.5; Jalen Ramsey (CB, Questionable) -0.2; Derrick Harmon (DT, Out, backup) -0.1 |
+| ARI | -0.8 | Andrew Wingard (S, Out) -0.3; Isaiah Adams (G, Out, backup) -0.1; Walter Nolen III (DT, Questionable) -0.1 |
+| GB | -0.8 | Aaron Banks (G, Doubtful) -0.3; Savion Williams (WR, Out, backup) -0.1; Javon Hargrave (DT, Questionable) -0.1 |
+| CAR | -0.7 | Monroe Freeling (OT, Questionable) -0.2; Jaelan Phillips (LB, Questionable) -0.1; Trevor Etienne (RB, Out, backup) -0.1 |
 | TEN | -0.7 | Amani Hooker (S, Out) -0.3; Carnell Tate (WR, Questionable) -0.2; Joshua Williams (CB, Out, backup) -0.1 |
-| NYG | -0.7 | Chauncey Golston (DE, Out) -0.5; Jason Pinnock (S, Out, backup) -0.1; Braxton Berrios (WR, Out, backup) -0.1 |
-| KC | -0.6 | Rashee Rice (WR, Questionable) -0.2; Josh Simmons (OT, Questionable) -0.2; Tyquan Thornton (WR, Out, backup) -0.1 |
-| CIN | -0.5 | Ja'Marr Chase (WR, Questionable) -0.2; Kyle Dugger (S, Out, backup) -0.1; Jalen Davis (CB, Out, backup) -0.1 |
-| HOU | -0.5 | Aireontae Ersery (OT, Questionable) -0.2; Tank Dell (WR, Out, backup) -0.1; Braden Smith (OT, Out, backup) -0.1 |
-| LV | -0.5 | Ashton Jeanty (RB, Questionable) -0.2; Trey Zuhn III (C, Out, backup) -0.1; Dont'e Thornton Jr. (WR, Out, backup) -0.1 |
-| DET | -0.4 | Tyleik Williams (DT, Questionable) -0.1; Cade Mays (C, Out, backup) -0.1; Ben Bartch (G, Out, backup) -0.1 |
-| MIA | -0.4 | Caleb Douglas (WR, Out, backup) -0.1; Reese Taylor (CB, Out, backup) -0.1; Storm Duck (CB, Out, backup) -0.1 |
+| NYG | -0.7 | Chauncey Golston (DE, Out) -0.5; Braxton Berrios (WR, Out, backup) -0.1; Jason Pinnock (S, Out, backup) -0.1 |
+| KC | -0.6 | Josh Simmons (OT, Questionable) -0.2; Rashee Rice (WR, Questionable) -0.2; Tyquan Thornton (WR, Out, backup) -0.1 |
+| CIN | -0.5 | Ja'Marr Chase (WR, Questionable) -0.2; Jalen Davis (CB, Out, backup) -0.1; Kyle Dugger (S, Out, backup) -0.1 |
+| HOU | -0.5 | Aireontae Ersery (OT, Questionable) -0.2; Braden Smith (OT, Out, backup) -0.1; Tank Dell (WR, Out, backup) -0.1 |
+| LV | -0.5 | Ashton Jeanty (RB, Questionable) -0.2; Jalen Nailor (WR, Out, backup) -0.1; Trey Zuhn III (C, Out, backup) -0.1 |
+| DET | -0.4 | Tyleik Williams (DT, Questionable) -0.1; Cade Mays (C, Out, backup) -0.1; Rock Ya-Sin (CB, Out, backup) -0.1 |
+| MIA | -0.4 | Justin Joly (TE, Out, backup) -0.1; Reese Taylor (CB, Out, backup) -0.1; Robert Beal Jr. (DE, Out, backup) -0.1 |
 | JAX | -0.3 | Eric Murray (S, Doubtful) -0.3; Caleb Ransaw (S, Out, backup) -0.1 |
-| SEA | -0.3 | Chazz Surratt (LB, Out, backup) -0.1; Irv Charles (WR, Out, backup) -0.1; Zach Charbonnet (RB, Out, backup) -0.1 |
-| LA | -0.3 | Terrance Ferguson (TE, Out, backup) -0.1; Myles Garrett (DE, Out, backup) -0.1; Quentin Lake (S, Questionable) -0.1 |
+| SEA | -0.3 | Irv Charles (WR, Out, backup) -0.1; Chazz Surratt (LB, Out, backup) -0.1; Julian Neal (CB, Out, backup) -0.1 |
+| LA | -0.3 | Myles Garrett (DE, Out, backup) -0.1; Terrance Ferguson (TE, Out, backup) -0.1; Quentin Lake (S, Questionable) -0.1 |
 
 ---
-Latest odds snapshot: Fri Oct 09 16:14 ET (20:14 UTC). Latest injury fetch: Sat Oct 10 21:05 ET (01:05 UTC). Prices move; check the book before betting.
+Latest odds snapshot: Fri Oct 09 16:14 ET (20:14 UTC). Latest injury fetch: Sun Oct 11 03:22 ET (07:22 UTC). Prices move; check the book before betting.
