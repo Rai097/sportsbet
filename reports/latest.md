@@ -1,6 +1,6 @@
 # NFL +EV report: 2026 week 7
 
-_Generated Thu Oct 22 01:05 ET (05:05 UTC)_
+_Generated Thu Oct 22 06:20 ET (10:20 UTC)_
 
 ## Odds API quota
 
@@ -70,42 +70,42 @@ Spreads are the home team's expected margin (+ = home favoured). `market` is the
 
 ## Injury impact
 
-Source: ESPN live feed, fetched Thu Oct 22 01:05 ET (05:05 UTC).
+Source: ESPN live feed, fetched Thu Oct 22 06:20 ET (10:20 UTC).
 
 | team | pts | biggest losses |
 |---|---|---|
-| GB | -3.4 | Jordan Love (QB, Questionable) -2.0; Brandon Cisse (CB, Questionable) -0.2; Matthew Golden (WR, Questionable) -0.2 |
+| GB | -3.4 | Jordan Love (QB, Questionable) -2.0; Matthew Golden (WR, Questionable) -0.2; Brandon Cisse (CB, Questionable) -0.2 |
 | TB | -2.5 | Baker Mayfield (QB, Questionable) -1.2; Antoine Winfield Jr. (S, Doubtful) -0.3; Zyon McCollum (CB, Questionable) -0.2 |
 | NE | -2.2 | Carlton Davis III (CB, Out) -0.5; Alijah Vera-Tucker (G, Out) -0.4; Ben Brown (C, Out) -0.4 |
-| BAL | -1.7 | Lamar Jackson (QB, Questionable) -1.0; T.J. Tampa (CB, Out, backup) -0.1; Tavius Robinson (LB, Questionable) -0.1 |
-| CLE | -1.7 | Quinshon Judkins (RB, Questionable) -0.2; Tytus Howard (OT, Questionable) -0.2; Denzel Boston (WR, Questionable) -0.2 |
+| BAL | -1.7 | Lamar Jackson (QB, Questionable) -1.0; John Simpson (G, Questionable) -0.1; Olaivavega Ioane (G, Questionable) -0.1 |
+| CLE | -1.7 | Tytus Howard (OT, Questionable) -0.2; KC Concepcion (WR, Questionable) -0.2; Denzel Boston (WR, Questionable) -0.2 |
 | IND | -1.7 | Sauce Gardner (CB, Doubtful) -0.4; Justin Walley (CB, Questionable) -0.2; Jalen Travis (OT, Questionable) -0.2 |
-| NYG | -1.4 | Jermaine Eluemunor (OT, Questionable) -0.2; Greg Newsome II (CB, Questionable) -0.2; Charlie Jones (WR, Questionable) -0.2 |
+| NYG | -1.4 | Jermaine Eluemunor (OT, Questionable) -0.2; Andrew Thomas (OT, Questionable) -0.2; Greg Newsome II (CB, Questionable) -0.2 |
 | DEN | -1.3 | Jonah Elliss (LB, Doubtful) -0.3; Talanoa Hufanga (S, Doubtful) -0.3; Pat Surtain II (CB, Questionable) -0.2 |
-| PHI | -1.2 | Jalen Hurts (QB, Out, backup) -0.6; Saquon Barkley (RB, Questionable) -0.2; Grant Calcaterra (TE, Out, backup) -0.1 |
-| MIN | -1.2 | Brian O'Neill (OT, Questionable) -0.2; Christian Darrisaw (OT, Questionable) -0.2; Justin Jefferson (WR, Questionable) -0.2 |
-| ARI | -1.1 | Carson Beck (QB, Questionable, backup) -0.2; Max Melton (CB, Questionable) -0.2; Garrett Williams (CB, Questionable) -0.2 |
-| SF | -1.1 | Nick Bosa (DE, Questionable) -0.2; Mike Evans (WR, Questionable) -0.2; Upton Stout (CB, Questionable) -0.2 |
-| HOU | -1.1 | David Montgomery (RB, Questionable) -0.2; Trent Brown (OT, Questionable) -0.2; Dalton Schultz (TE, Questionable) -0.1 |
-| NYJ | -1.0 | Kiko Mauigoa (LB, Doubtful) -0.3; Kene Nwangwu (RB, Questionable) -0.2; Breece Hall (RB, Questionable) -0.2 |
-| LAC | -0.9 | Donte Jackson (CB, Questionable) -0.2; Joe Alt (OT, Questionable) -0.2; Ladd McConkey (WR, Questionable) -0.2 |
-| KC | -0.9 | L'Jarius Sneed (CB, Questionable) -0.2; Rashee Rice (WR, Questionable) -0.2; Josh Simmons (OT, Questionable) -0.2 |
-| SEA | -0.9 | Drew Lock (QB, Questionable, backup) -0.2; Rashid Shaheed (WR, Questionable) -0.2; Zach Charbonnet (RB, Out, backup) -0.1 |
-| WAS | -0.9 | Marcus Mariota (QB, Doubtful, backup) -0.5; Jaylin Lane (WR, Out, backup) -0.1; Terry McLaurin (WR, Out, backup) -0.1 |
-| LV | -0.8 | Kolton Miller (OT, Questionable) -0.2; Quay Walker (LB, Questionable) -0.1; Dont'e Thornton Jr. (WR, Out, backup) -0.1 |
-| ATL | -0.8 | Brian Robinson Jr. (RB, Questionable) -0.2; Samson Ebukam (DE, Questionable) -0.2; C.J. Henderson (CB, Questionable) -0.2 |
-| NO | -0.8 | Alvin Kamara (RB, Questionable) -0.2; Quincy Riley (CB, Questionable) -0.2; Kaden Elliss (LB, Questionable) -0.1 |
-| LA | -0.7 | Trent McDuffie (CB, Questionable) -0.2; Terrance Ferguson (TE, Out, backup) -0.1; Myles Garrett (DE, Out, backup) -0.1 |
+| PHI | -1.2 | Jalen Hurts (QB, Out, backup) -0.6; Saquon Barkley (RB, Questionable) -0.2; Nolan Smith Jr. (LB, Questionable) -0.1 |
+| MIN | -1.2 | James Pierre (CB, Questionable) -0.2; Justin Jefferson (WR, Questionable) -0.2; Brian O'Neill (OT, Questionable) -0.2 |
+| ARI | -1.1 | Carson Beck (QB, Questionable, backup) -0.2; Garrett Williams (CB, Questionable) -0.2; Max Melton (CB, Questionable) -0.2 |
+| SF | -1.1 | Mike Evans (WR, Questionable) -0.2; Upton Stout (CB, Questionable) -0.2; Nick Bosa (DE, Questionable) -0.2 |
+| HOU | -1.1 | Trent Brown (OT, Questionable) -0.2; David Montgomery (RB, Questionable) -0.2; Jake Hummel (LB, Out, backup) -0.1 |
+| NYJ | -1.0 | Kiko Mauigoa (LB, Doubtful) -0.3; Breece Hall (RB, Questionable) -0.2; Kene Nwangwu (RB, Questionable) -0.2 |
+| LAC | -0.9 | Joe Alt (OT, Questionable) -0.2; Donte Jackson (CB, Questionable) -0.2; Ladd McConkey (WR, Questionable) -0.2 |
+| KC | -0.9 | Josh Simmons (OT, Questionable) -0.2; L'Jarius Sneed (CB, Questionable) -0.2; Rashee Rice (WR, Questionable) -0.2 |
+| SEA | -0.9 | Drew Lock (QB, Questionable, backup) -0.2; Rashid Shaheed (WR, Questionable) -0.2; Anthony Bradford (G, Out, backup) -0.1 |
+| WAS | -0.9 | Marcus Mariota (QB, Doubtful, backup) -0.5; Javon Kinlaw (DT, Questionable) -0.1; Jaylin Lane (WR, Out, backup) -0.1 |
+| LV | -0.8 | Kolton Miller (OT, Questionable) -0.2; Dont'e Thornton Jr. (WR, Out, backup) -0.1; Tonka Hemingway (DT, Questionable) -0.1 |
+| ATL | -0.8 | Brian Robinson Jr. (RB, Questionable) -0.2; C.J. Henderson (CB, Questionable) -0.2; Samson Ebukam (DE, Questionable) -0.2 |
+| NO | -0.8 | Quincy Riley (CB, Questionable) -0.2; Alvin Kamara (RB, Questionable) -0.2; Kaden Elliss (LB, Questionable) -0.1 |
+| LA | -0.7 | Trent McDuffie (CB, Questionable) -0.2; Nate Landman (LB, Questionable) -0.1; Davante Adams (WR, Out, backup) -0.1 |
 | DAL | -0.6 | Dee Winters (LB, Doubtful) -0.3; KaVontae Turpin (WR, Questionable) -0.2; DeMarvion Overshown (LB, Questionable) -0.1 |
-| CHI | -0.5 | T.J. Edwards (LB, Doubtful) -0.3; Dayo Odeyingbo (DE, Out, backup) -0.1; Anthony Johnson Jr. (S, Out, backup) -0.1 |
+| CHI | -0.5 | T.J. Edwards (LB, Doubtful) -0.3; Anthony Johnson Jr. (S, Out, backup) -0.1; Kyle Monangai (RB, Out, backup) -0.1 |
 | BUF | -0.4 | DJ Moore (WR, Questionable) -0.2; Ed Oliver (DT, Questionable) -0.1 |
-| DET | -0.4 | Brian Branch (S, Out, backup) -0.1; Devin White (LB, Out, backup) -0.1; Kerby Joseph (S, Out, backup) -0.1 |
+| DET | -0.4 | Kerby Joseph (S, Out, backup) -0.1; Ben Bartch (G, Out, backup) -0.1; Devin White (LB, Out, backup) -0.1 |
 | PIT | -0.3 | Jalen Ramsey (CB, Questionable) -0.2; Alex Highsmith (LB, Questionable) -0.1; DeShon Elliott (S, Out, backup) -0.1 |
-| CAR | -0.3 | Bam Martin-Scott (LB, Out, backup) -0.1; Jonathon Brooks (RB, Out, backup) -0.1; Jaelan Phillips (LB, Questionable) -0.1 |
+| CAR | -0.3 | Cam Jackson (DT, Out, backup) -0.1; Bam Martin-Scott (LB, Out, backup) -0.1; Jaelan Phillips (LB, Questionable) -0.1 |
 | JAX | -0.3 | Montaric Brown (CB, Questionable) -0.2; Antonio Johnson (S, Questionable) -0.1 |
 | MIA | -0.3 | Jaylen Wright (RB, Questionable) -0.2; Kyle Louis (LB, Out, backup) -0.1 |
 | TEN | -0.2 | Dorian Mausi (LB, Out, backup) -0.1; Kevin Winston Jr. (S, Questionable) -0.1 |
 | CIN | -0.1 | Tanner Hudson (TE, Out, backup) -0.1; Swayze Bozeman (LB, Out, backup) -0.1 |
 
 ---
-Latest odds snapshot: Wed Oct 21 16:15 ET (20:15 UTC). Latest injury fetch: Thu Oct 22 01:05 ET (05:05 UTC). Prices move; check the book before betting.
+Latest odds snapshot: Wed Oct 21 16:15 ET (20:15 UTC). Latest injury fetch: Thu Oct 22 06:20 ET (10:20 UTC). Prices move; check the book before betting.
