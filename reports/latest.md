@@ -1,6 +1,6 @@
 # NFL +EV report: 2026 week 9
 
-_Generated Sat Nov 07 03:58 ET (08:58 UTC)_
+_Generated Sat Nov 07 10:47 ET (15:47 UTC)_
 
 ## Odds API quota
 
@@ -71,42 +71,42 @@ Spreads are the home team's expected margin (+ = home favoured). `market` is the
 
 ## Injury impact
 
-Source: ESPN live feed, fetched Sat Nov 07 03:58 ET (08:58 UTC).
+Source: ESPN live feed, fetched Sat Nov 07 10:47 ET (15:47 UTC).
 
 | team | pts | biggest losses |
 |---|---|---|
 | SEA | -3.1 | Rashid Shaheed (WR, Out) -0.7; Charles Cross (OT, Out) -0.6; Sam Darnold (QB, Out) -0.6 |
-| BAL | -3.0 | Kedon Slovis (QB, Out, backup) -0.6; Tyler Huntley (QB, Out, backup) -0.6; Lamar Jackson (QB, Out, backup) -0.6 |
+| BAL | -3.0 | Kedon Slovis (QB, Out, backup) -0.6; Lamar Jackson (QB, Out, backup) -0.6; Tyler Huntley (QB, Out, backup) -0.6 |
 | PHI | -2.2 | Britain Covey (WR, Out) -0.7; DeVonta Smith (WR, Out) -0.7; Jihaad Campbell (LB, Out) -0.3 |
 | CAR | -1.9 | Will Lee III (CB, Out) -0.5; Damien Lewis (G, Out) -0.4; Bobby Okereke (LB, Out) -0.3 |
-| ATL | -1.9 | Zachariah Branch (WR, Out) -0.7; Brian Robinson Jr. (RB, Out) -0.6; Beaux Collins (WR, Out, backup) -0.1 |
-| GB | -1.8 | Travis Glover (OT, Out) -0.6; Sean Rhyan (G, Out) -0.4; Zaire Franklin (LB, Out) -0.3 |
+| ATL | -1.9 | Zachariah Branch (WR, Out) -0.7; Brian Robinson Jr. (RB, Out) -0.6; James Pearce Jr. (LB, Questionable) -0.1 |
 | ARI | -1.8 | Jayden Williams (OT, Out) -0.6; Jon Gaines II (G, Out) -0.4; Max Melton (CB, Questionable) -0.2 |
+| GB | -1.8 | Travis Glover (OT, Out) -0.6; Sean Rhyan (G, Out) -0.4; Zaire Franklin (LB, Out) -0.3 |
 | DET | -1.7 | D.J. Reed (CB, Out) -0.5; Cade Mays (C, Out) -0.4; Jack Campbell (LB, Out) -0.3 |
 | CLE | -1.6 | Deshaun Watson (QB, Questionable) -1.2; Maliek Collins (DT, Out) -0.4 |
-| TEN | -1.5 | Carnell Tate (WR, Out) -0.7; Marcus Harris (CB, Questionable) -0.2; JC Latham (OT, Questionable) -0.2 |
-| SF | -1.5 | Mike Evans (WR, Out) -0.7; Upton Stout (CB, Questionable) -0.2; Christian Kirk (WR, Out, backup) -0.1 |
-| NE | -1.3 | A.J. Brown (WR, Out) -0.7; Morgan Moses (OT, Questionable) -0.2; Mack Hollins (WR, Out, backup) -0.1 |
-| DAL | -1.3 | KaVontae Turpin (WR, Out) -0.7; Joey Porter Jr. (CB, Questionable) -0.2; DeMarvion Overshown (LB, Questionable) -0.1 |
+| TEN | -1.5 | Carnell Tate (WR, Out) -0.7; JC Latham (OT, Questionable) -0.2; Marcus Harris (CB, Questionable) -0.2 |
+| SF | -1.5 | Mike Evans (WR, Out) -0.7; Upton Stout (CB, Questionable) -0.2; Nate Hobbs (CB, Out, backup) -0.1 |
+| NE | -1.3 | A.J. Brown (WR, Out) -0.7; Morgan Moses (OT, Questionable) -0.2; Greg Van Roten (G, Out, backup) -0.1 |
+| DAL | -1.3 | KaVontae Turpin (WR, Out) -0.7; Joey Porter Jr. (CB, Questionable) -0.2; Jonathan Bullard (DT, Out, backup) -0.1 |
 | IND | -1.3 | Justin Walley (CB, Out) -0.5; Akeem Davis-Gaither (LB, Out) -0.3; Jalen Travis (OT, Questionable) -0.2 |
 | NYJ | -1.3 | Garrett Wilson (WR, Out) -0.7; Trevin Wallace (LB, Out) -0.3; Max Mitchell (OT, Out, backup) -0.1 |
 | DEN | -1.2 | Eyioma Uwazurike (DE, Out) -0.5; Brandon Jones (S, Out) -0.3; Kris Abrams-Draine (CB, Out, backup) -0.1 |
-| BUF | -0.9 | Dion Dawkins (OT, Questionable) -0.2; DJ Moore (WR, Questionable) -0.2; Spencer Brown (OT, Questionable) -0.2 |
+| BUF | -0.9 | Dion Dawkins (OT, Questionable) -0.2; Alec Anderson (OT, Questionable) -0.2; Spencer Brown (OT, Questionable) -0.2 |
 | KC | -0.9 | Mansoor Delane (CB, Out) -0.5; Nikko Remigio (WR, Questionable) -0.2; Peter Woods (DT, Out, backup) -0.1 |
-| LA | -0.9 | Trent McDuffie (CB, Questionable) -0.2; Jordan Whittington (WR, Questionable) -0.2; Ronnie Rivers (RB, Out, backup) -0.1 |
+| LA | -0.9 | Jordan Whittington (WR, Questionable) -0.2; Trent McDuffie (CB, Questionable) -0.2; Kam Curl (S, Questionable) -0.1 |
 | NYG | -0.8 | Cam Skattebo (RB, Doubtful) -0.5; Charlie Jones (WR, Questionable) -0.2; Tyrone Tracy Jr. (RB, Out, backup) -0.1 |
 | TB | -0.8 | Yaya Diaby (LB, Out) -0.3; Emeka Egbuka (WR, Questionable) -0.2; Jalen McMillan (WR, Out, backup) -0.1 |
 | NO | -0.8 | Asim Richards (OT, Questionable) -0.2; Martin Emerson Jr. (CB, Questionable) -0.2; Kelvin Banks Jr. (OT, Out, backup) -0.1 |
-| LAC | -0.7 | Kayode Awosika (G, Doubtful) -0.3; Kendall Williamson (S, Out, backup) -0.1; Denzel Perryman (LB, Out, backup) -0.1 |
-| WAS | -0.7 | Daron Payne (DT, Out, backup) -0.1; Treylon Burks (WR, Out, backup) -0.1; Javon Kinlaw (DT, Out, backup) -0.1 |
+| LAC | -0.7 | Kayode Awosika (G, Doubtful) -0.3; Deane Leonard (CB, Out, backup) -0.1; Derwin James Jr. (S, Out, backup) -0.1 |
+| WAS | -0.7 | Daron Payne (DT, Out, backup) -0.1; Jeremy McNichols (RB, Out, backup) -0.1; Terry McLaurin (WR, Out, backup) -0.1 |
 | MIN | -0.6 | Kyler Murray (QB, Questionable) -0.4; Andrew Van Ginkel (LB, Questionable) -0.1 |
 | HOU | -0.5 | Reed Blankenship (S, Out) -0.3; David Montgomery (RB, Out, backup) -0.1; Jaylin Noel (WR, Out, backup) -0.1 |
-| PIT | -0.4 | Brandin Echols (CB, Out, backup) -0.1; Ben Skowronek (WR, Out, backup) -0.1; Michael Pittman Jr. (WR, Out, backup) -0.1 |
-| JAX | -0.4 | Wesley Williams (DE, Out, backup) -0.1; Alijah Huzzie (CB, Out, backup) -0.1; Eric Murray (S, Out, backup) -0.1 |
-| CIN | -0.3 | Kyle Dugger (S, Out, backup) -0.1; Cashius Howell (DE, Out, backup) -0.1; Andrei Iosivas (WR, Out, backup) -0.1 |
+| PIT | -0.4 | Brandin Echols (CB, Out, backup) -0.1; Michael Pittman Jr. (WR, Out, backup) -0.1; Sebastian Joseph-Day (DT, Out, backup) -0.1 |
+| JAX | -0.4 | Cam'Ron Silmon-Craig (S, Out, backup) -0.1; Wesley Williams (DE, Out, backup) -0.1; CJ Williams (WR, Out, backup) -0.1 |
+| CIN | -0.3 | Kyle Dugger (S, Out, backup) -0.1; Andrei Iosivas (WR, Out, backup) -0.1; Erick All Jr. (TE, Out, backup) -0.1 |
 | MIA | -0.3 | Jaylen Wright (RB, Questionable) -0.2; Darrell Baker Jr. (CB, Out, backup) -0.1 |
-| CHI | -0.2 | Zavier Scott (RB, Out, backup) -0.1; Kentavius Street (DT, Out, backup) -0.1; Braxton Jones (OT, Out, backup) -0.1 |
+| CHI | -0.2 | Kentavius Street (DT, Out, backup) -0.1; Zavier Scott (RB, Out, backup) -0.1; Braxton Jones (OT, Out, backup) -0.1 |
 | LV | -0.2 | Darien Porter (CB, Questionable) -0.2; Thomas Booker IV (DT, Out, backup) -0.1 |
 
 ---
-Latest odds snapshot: Fri Nov 06 16:39 ET (21:39 UTC). Latest injury fetch: Sat Nov 07 03:58 ET (08:58 UTC). Prices move; check the book before betting.
+Latest odds snapshot: Fri Nov 06 16:39 ET (21:39 UTC). Latest injury fetch: Sat Nov 07 10:47 ET (15:47 UTC). Prices move; check the book before betting.
