@@ -1,6 +1,6 @@
 # NFL +EV report: 2026 week 10
 
-_Generated Sat Nov 14 01:47 ET (06:47 UTC)_
+_Generated Sat Nov 14 09:21 ET (14:21 UTC)_
 
 ## Odds API quota
 
@@ -56,41 +56,41 @@ Spreads are the home team's expected margin (+ = home favoured). `market` is the
 
 ## Injury impact
 
-Source: ESPN live feed, fetched Sat Nov 14 01:47 ET (06:47 UTC).
+Source: ESPN live feed, fetched Sat Nov 14 09:21 ET (14:21 UTC).
 
 | team | pts | biggest losses |
 |---|---|---|
 | GB | -2.3 | Josh Jacobs (RB, Out) -0.6; Sean Rhyan (G, Out) -0.4; Zaire Franklin (LB, Doubtful) -0.3 |
 | PHI | -2.1 | Britain Covey (WR, Out) -0.7; DeVonta Smith (WR, Out) -0.7; Jihaad Campbell (LB, Out) -0.3 |
-| TEN | -2.0 | Carnell Tate (WR, Out) -0.7; Peter Skoronski (G, Out) -0.4; Cody Barton (LB, Out) -0.3 |
+| TEN | -2.0 | Carnell Tate (WR, Out) -0.7; Peter Skoronski (G, Out) -0.4; Anthony Hill Jr. (LB, Out) -0.3 |
 | HOU | -1.9 | Danielle Hunter (DE, Out) -0.5; Keylan Rutledge (G, Out) -0.4; Azeez Al-Shaair (LB, Out) -0.3 |
-| SF | -1.8 | Mike Evans (WR, Out) -0.7; Trent Williams (OT, Questionable) -0.2; Deommodore Lenoir (CB, Questionable) -0.2 |
+| SF | -1.8 | Mike Evans (WR, Out) -0.7; Renardo Green (CB, Questionable) -0.2; Upton Stout (CB, Questionable) -0.2 |
 | ARI | -1.8 | Gardner Minshew II (QB, Out, backup) -0.6; Hjalte Froholdt (C, Out) -0.4; Jayden Williams (OT, Questionable) -0.2 |
 | DAL | -1.7 | Jake Ferguson (TE, Out) -0.4; Donovan Ezeiruaku (LB, Out) -0.3; P.J. Locke (S, Out) -0.3 |
 | MIN | -1.7 | Kyler Murray (QB, Out, backup) -0.6; T.J. Hockenson (TE, Out) -0.4; Blake Cashman (LB, Out) -0.3 |
-| SEA | -1.7 | Charles Cross (OT, Out) -0.6; Quenton Nelson (G, Out) -0.4; Leonard Williams (DT, Out) -0.4 |
+| SEA | -1.7 | Charles Cross (OT, Out) -0.6; Leonard Williams (DT, Out) -0.4; Quenton Nelson (G, Out) -0.4 |
 | NE | -1.4 | Carlton Davis III (CB, Out) -0.5; A.J. Brown (WR, Questionable) -0.2; Rhamondre Stevenson (RB, Questionable) -0.2 |
 | MIA | -1.3 | Malik Willis (QB, Out, backup) -0.6; Aaron Brewer (C, Out) -0.4; Jared Wayne (WR, Out, backup) -0.1 |
 | DEN | -1.3 | Talanoa Hufanga (S, Out) -0.3; Brandon Jones (S, Out) -0.3; Jaylen Waddle (WR, Questionable) -0.2 |
-| NO | -1.1 | Taliese Fuaga (OT, Out) -0.6; Martin Emerson Jr. (CB, Questionable) -0.2; Erik McCoy (C, Out, backup) -0.1 |
-| DET | -1.1 | D.J. Reed (CB, Out) -0.5; Amon-Ra St. Brown (WR, Questionable) -0.2; Jack Campbell (LB, Out, backup) -0.1 |
+| NO | -1.1 | Taliese Fuaga (OT, Out) -0.6; Martin Emerson Jr. (CB, Questionable) -0.2; Travis Etienne Jr. (RB, Out, backup) -0.1 |
+| DET | -1.1 | D.J. Reed (CB, Out) -0.5; Amon-Ra St. Brown (WR, Questionable) -0.2; Cade Mays (C, Out, backup) -0.1 |
 | KC | -1.0 | Jaylon Moore (OT, Out) -0.6; Mansoor Delane (CB, Questionable) -0.2; Kenneth Walker III (RB, Questionable) -0.2 |
-| CAR | -1.0 | Bobby Okereke (LB, Out) -0.3; Will Lee III (CB, Questionable) -0.2; Jonathon Brooks (RB, Out, backup) -0.1 |
-| WAS | -1.0 | Athan Kaliakmanis (QB, Out, backup) -0.6; Isaac Yiadom (CB, Out, backup) -0.1; Tanoa Togiai (G, Out, backup) -0.1 |
-| LA | -0.9 | Myles Garrett (DE, Questionable) -0.2; Trent McDuffie (CB, Questionable) -0.2; Kam Curl (S, Questionable) -0.1 |
+| CAR | -1.0 | Bobby Okereke (LB, Out) -0.3; Will Lee III (CB, Questionable) -0.2; Mike Jackson (CB, Out, backup) -0.1 |
+| WAS | -1.0 | Athan Kaliakmanis (QB, Out, backup) -0.6; Tanoa Togiai (G, Out, backup) -0.1; Isaac Yiadom (CB, Out, backup) -0.1 |
+| LA | -0.9 | Myles Garrett (DE, Questionable) -0.2; Trent McDuffie (CB, Questionable) -0.2; Puka Nacua (WR, Out, backup) -0.1 |
 | NYJ | -0.8 | Trevin Wallace (LB, Out) -0.3; Garrett Wilson (WR, Questionable) -0.2; Jarvis Brownlee Jr. (CB, Questionable) -0.2 |
-| ATL | -0.8 | Divine Deablo (LB, Doubtful) -0.3; Gervon Dexter Sr. (DT, Questionable) -0.1; Samson Ebukam (DE, Out, backup) -0.1 |
-| IND | -0.8 | Akeem Davis-Gaither (LB, Out) -0.3; Jerry Tillery (DT, Out, backup) -0.1; Alec Pierce (WR, Out, backup) -0.1 |
+| ATL | -0.8 | Divine Deablo (LB, Doubtful) -0.3; Zachariah Branch (WR, Out, backup) -0.1; Gervon Dexter Sr. (DT, Questionable) -0.1 |
+| IND | -0.8 | Akeem Davis-Gaither (LB, Out) -0.3; Jaylon Carlies (LB, Out, backup) -0.1; Jalen Travis (OT, Out, backup) -0.1 |
 | BUF | -0.8 | Spencer Brown (OT, Doubtful) -0.5; Christian Benford (CB, Questionable) -0.2; Tyrell Shavers (WR, Out, backup) -0.1 |
 | LAC | -0.7 | Keaton Mitchell (RB, Questionable) -0.2; Ladd McConkey (WR, Questionable) -0.2; David Njoku (TE, Out, backup) -0.1 |
 | BAL | -0.7 | Lamar Jackson (QB, Out, backup) -0.6; Jaylinn Hawkins (S, Questionable) -0.1 |
-| CHI | -0.6 | Luther Burden III (WR, Questionable) -0.2; Malik Muhammad II (CB, Out, backup) -0.1; Kyle Monangai (RB, Out, backup) -0.1 |
+| CHI | -0.7 | Luther Burden III (WR, Questionable) -0.2; Malik Muhammad II (CB, Out, backup) -0.1; Zavier Scott (RB, Out, backup) -0.1 |
 | CLE | -0.6 | Ronnie Hickman (S, Out) -0.3; Denzel Boston (WR, Questionable) -0.2 |
-| TB | -0.6 | Yaya Diaby (LB, Out) -0.3; Jalen McMillan (WR, Out, backup) -0.1; Antoine Winfield Jr. (S, Questionable) -0.1 |
-| JAX | -0.6 | Jessie Bates III (S, Out) -0.3; B.J. Green II (DE, Out, backup) -0.1; Robert Hainsey (C, Questionable) -0.1 |
-| NYG | -0.5 | Josh Sills (G, Out, backup) -0.1; J.C. Davis (OT, Out, backup) -0.1; Nikko Reed (CB, Out, backup) -0.1 |
-| CIN | -0.4 | Kyle Dugger (S, Out, backup) -0.1; Andrei Iosivas (WR, Out, backup) -0.1; Cashius Howell (DE, Out, backup) -0.1 |
-| PIT | -0.2 | Michael Pittman Jr. (WR, Out, backup) -0.1; Derrick Harmon (DT, Out, backup) -0.1 |
+| TB | -0.6 | Yaya Diaby (LB, Out) -0.3; Antoine Winfield Jr. (S, Questionable) -0.1; Jalen McMillan (WR, Out, backup) -0.1 |
+| JAX | -0.6 | Jessie Bates III (S, Out) -0.3; Robert Hainsey (C, Questionable) -0.1; B.J. Green II (DE, Out, backup) -0.1 |
+| NYG | -0.5 | Nikko Reed (CB, Out, backup) -0.1; J.C. Davis (OT, Out, backup) -0.1; Paulson Adebo (CB, Out, backup) -0.1 |
+| CIN | -0.4 | Andrei Iosivas (WR, Out, backup) -0.1; Jalen Davis (CB, Out, backup) -0.1; Kyle Dugger (S, Out, backup) -0.1 |
+| PIT | -0.2 | Derrick Harmon (DT, Out, backup) -0.1; Michael Pittman Jr. (WR, Out, backup) -0.1 |
 
 ---
-Latest odds snapshot: Sun Nov 08 08:44 ET (13:44 UTC). Latest injury fetch: Sat Nov 14 01:47 ET (06:47 UTC). Prices move; check the book before betting.
+Latest odds snapshot: Sun Nov 08 08:44 ET (13:44 UTC). Latest injury fetch: Sat Nov 14 09:21 ET (14:21 UTC). Prices move; check the book before betting.
