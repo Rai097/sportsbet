@@ -1,6 +1,6 @@
 # NFL +EV report: 2026 week 10
 
-_Generated Sat Nov 14 18:13 ET (23:13 UTC)_
+_Generated Sat Nov 14 21:53 ET (02:53 UTC)_
 
 ## Odds API quota
 
@@ -43,54 +43,54 @@ Spreads are the home team's expected margin (+ = home favoured). `market` is the
 | Sun 11/15 09:30 | NE @ DET | +2.5 | +0.3 | +4.1 | +1.6 | 64% |  |
 | Sun 11/15 13:00 | KC @ ATL | -3.0 | +0.6 | -1.7 | +1.3 | 44% |  |
 | Sun 11/15 13:00 | HOU @ CLE | -4.5 | +1.4 | +0.1 | +4.6 | 50% |  |
-| Sun 11/15 13:00 | MIN @ GB | +2.5 | -0.4 | +1.8 | -0.7 | 56% |  |
+| Sun 11/15 13:00 | MIN @ GB | +2.5 | -0.5 | +1.7 | -0.8 | 56% |  |
 | Sun 11/15 13:00 | MIA @ IND | +3.5 | +0.5 | +3.9 | +0.4 | 64% |  |
 | Sun 11/15 13:00 | CAR @ NO | +2.5 | +0.0 | +2.1 | -0.4 | 57% |  |
 | Sun 11/15 13:00 | BUF @ NYJ | -8.5 | +0.0 | -12.1 | -3.6 | 15% |  |
 | Sun 11/15 13:00 | JAX @ TEN | -10.5 | -1.5 | -12.5 | -2.0 | 14% |  |
 | Sun 11/15 16:05 | LA @ ARI | -9.5 | -0.8 | -6.8 | +2.7 | 27% |  |
 | Sun 11/15 16:05 | SEA @ LV | -6.5 | +1.7 | -4.8 | +1.7 | 33% |  |
-| Sun 11/15 16:25 | SF @ DAL | -4.5 | +0.1 | -4.1 | +0.4 | 36% |  |
+| Sun 11/15 16:25 | SF @ DAL | -4.5 | +0.1 | -4.0 | +0.5 | 36% |  |
 | Sun 11/15 20:20 | PIT @ CIN | +3.5 | -0.2 | +3.0 | -0.5 | 61% |  |
-| Mon 11/16 20:15 | LAC @ BAL | +4.5 | -0.1 | +6.6 | +2.1 | 72% |  |
+| Mon 11/16 20:15 | LAC @ BAL | +4.5 | +0.0 | +6.7 | +2.2 | 72% |  |
 
 ## Injury impact
 
-Source: ESPN live feed, fetched Sat Nov 14 18:13 ET (23:13 UTC).
+Source: ESPN live feed, fetched Sat Nov 14 21:53 ET (02:53 UTC).
 
 | team | pts | biggest losses |
 |---|---|---|
-| PHI | -2.1 | DeVonta Smith (WR, Out) -0.7; Britain Covey (WR, Out) -0.7; Jihaad Campbell (LB, Out) -0.3 |
+| PHI | -2.1 | Britain Covey (WR, Out) -0.7; DeVonta Smith (WR, Out) -0.7; Jihaad Campbell (LB, Out) -0.3 |
 | GB | -2.1 | Josh Jacobs (RB, Out) -0.6; Sean Rhyan (G, Out) -0.4; Zaire Franklin (LB, Doubtful) -0.3 |
 | HOU | -2.0 | Danielle Hunter (DE, Out) -0.5; Keylan Rutledge (G, Out) -0.4; Azeez Al-Shaair (LB, Out) -0.3 |
 | TEN | -2.0 | Carnell Tate (WR, Out) -0.7; Peter Skoronski (G, Out) -0.4; Cody Barton (LB, Out) -0.3 |
-| SF | -1.8 | Mike Evans (WR, Out) -0.7; Renardo Green (CB, Questionable) -0.2; Upton Stout (CB, Questionable) -0.2 |
+| SF | -1.9 | Mike Evans (WR, Out) -0.7; Trent Williams (OT, Questionable) -0.2; Renardo Green (CB, Questionable) -0.2 |
 | DAL | -1.7 | Jake Ferguson (TE, Out) -0.4; Donovan Ezeiruaku (LB, Out) -0.3; P.J. Locke (S, Out) -0.3 |
-| MIN | -1.7 | Kyler Murray (QB, Out, backup) -0.6; T.J. Hockenson (TE, Out) -0.4; Blake Cashman (LB, Out) -0.3 |
-| ARI | -1.7 | Gardner Minshew II (QB, Out, backup) -0.6; Hjalte Froholdt (C, Out) -0.4; Jayden Williams (OT, Questionable) -0.2 |
-| SEA | -1.7 | Charles Cross (OT, Out) -0.6; Leonard Williams (DT, Out) -0.4; Quenton Nelson (G, Out) -0.4 |
+| ARI | -1.7 | Gardner Minshew II (QB, Out, backup) -0.6; Hjalte Froholdt (C, Out) -0.4; Max Melton (CB, Questionable) -0.2 |
+| SEA | -1.7 | Charles Cross (OT, Out) -0.6; Quenton Nelson (G, Out) -0.4; Leonard Williams (DT, Out) -0.4 |
+| MIN | -1.6 | Kyler Murray (QB, Out, backup) -0.6; T.J. Hockenson (TE, Out) -0.4; Blake Cashman (LB, Out) -0.3 |
 | KC | -1.4 | Kenneth Walker III (RB, Out) -0.6; Jaylon Moore (OT, Out) -0.6; Mansoor Delane (CB, Questionable) -0.2 |
-| NE | -1.4 | Carlton Davis III (CB, Out) -0.5; A.J. Brown (WR, Questionable) -0.2; Rhamondre Stevenson (RB, Questionable) -0.2 |
-| MIA | -1.3 | Malik Willis (QB, Out, backup) -0.6; Aaron Brewer (C, Out) -0.4; Darrell Baker Jr. (CB, Out, backup) -0.1 |
+| NE | -1.4 | Carlton Davis III (CB, Out) -0.5; Rhamondre Stevenson (RB, Questionable) -0.2; A.J. Brown (WR, Questionable) -0.2 |
+| MIA | -1.3 | Malik Willis (QB, Out, backup) -0.6; Aaron Brewer (C, Out) -0.4; Jared Wayne (WR, Out, backup) -0.1 |
 | DEN | -1.3 | Brandon Jones (S, Out) -0.3; Talanoa Hufanga (S, Out) -0.3; Jaylen Waddle (WR, Questionable) -0.2 |
-| DET | -1.1 | D.J. Reed (CB, Out) -0.5; Amon-Ra St. Brown (WR, Questionable) -0.2; Cade Mays (C, Out, backup) -0.1 |
-| WAS | -1.0 | Athan Kaliakmanis (QB, Out, backup) -0.6; Colson Yankoff (TE, Out, backup) -0.1; Ricky Barber (DT, Out, backup) -0.1 |
-| NO | -1.0 | Taliese Fuaga (OT, Out) -0.6; Martin Emerson Jr. (CB, Questionable) -0.2; Christen Miller (DT, Out, backup) -0.1 |
+| DET | -1.1 | D.J. Reed (CB, Out) -0.5; Amon-Ra St. Brown (WR, Questionable) -0.2; Jack Campbell (LB, Out, backup) -0.1 |
+| BAL | -1.0 | Lamar Jackson (QB, Out, backup) -0.6; Jaylinn Hawkins (S, Out) -0.3; Adam Randall (RB, Out, backup) -0.1 |
+| LAC | -1.0 | Ladd McConkey (WR, Questionable) -0.2; Kayode Awosika (G, Questionable) -0.1; Denzel Perryman (LB, Out, backup) -0.1 |
+| WAS | -1.0 | Athan Kaliakmanis (QB, Out, backup) -0.6; Tanoa Togiai (G, Out, backup) -0.1; Lucas Patrick (G, Out, backup) -0.1 |
+| NO | -1.0 | Taliese Fuaga (OT, Out) -0.6; Martin Emerson Jr. (CB, Questionable) -0.2; Erik McCoy (C, Out, backup) -0.1 |
 | CAR | -0.9 | Bobby Okereke (LB, Out) -0.3; Will Lee III (CB, Questionable) -0.2; Brady Christensen (G, Out, backup) -0.1 |
-| BAL | -0.9 | Lamar Jackson (QB, Out, backup) -0.6; Jaylinn Hawkins (S, Out) -0.3 |
-| LA | -0.9 | Trent McDuffie (CB, Questionable) -0.2; Myles Garrett (DE, Questionable) -0.2; Davante Adams (WR, Out, backup) -0.1 |
-| ATL | -0.9 | Divine Deablo (LB, Out) -0.3; Zachariah Branch (WR, Out, backup) -0.1; James Pearce Jr. (LB, Questionable) -0.1 |
-| LAC | -0.8 | Ladd McConkey (WR, Questionable) -0.2; David Njoku (TE, Out, backup) -0.1; Kendall Williamson (S, Out, backup) -0.1 |
-| IND | -0.8 | Akeem Davis-Gaither (LB, Out) -0.3; Mo Alie-Cox (TE, Out, backup) -0.1; Alec Pierce (WR, Out, backup) -0.1 |
-| NYJ | -0.8 | Trevin Wallace (LB, Out) -0.3; Garrett Wilson (WR, Questionable) -0.2; Jarvis Brownlee Jr. (CB, Questionable) -0.2 |
+| LA | -0.9 | Myles Garrett (DE, Questionable) -0.2; Trent McDuffie (CB, Questionable) -0.2; Davante Adams (WR, Out, backup) -0.1 |
+| ATL | -0.9 | Divine Deablo (LB, Out) -0.3; James Pearce Jr. (LB, Questionable) -0.1; Zachariah Branch (WR, Out, backup) -0.1 |
+| IND | -0.8 | Akeem Davis-Gaither (LB, Out) -0.3; Jalen Travis (OT, Out, backup) -0.1; Jerry Tillery (DT, Out, backup) -0.1 |
+| NYJ | -0.8 | Trevin Wallace (LB, Out) -0.3; Jarvis Brownlee Jr. (CB, Questionable) -0.2; Garrett Wilson (WR, Questionable) -0.2 |
 | BUF | -0.8 | Spencer Brown (OT, Doubtful) -0.5; Christian Benford (CB, Questionable) -0.2; Tyrell Shavers (WR, Out, backup) -0.1 |
-| CHI | -0.7 | Luther Burden III (WR, Questionable) -0.2; Kyle Monangai (RB, Out, backup) -0.1; Malik Muhammad II (CB, Out, backup) -0.1 |
+| CHI | -0.7 | Luther Burden III (WR, Questionable) -0.2; Braxton Jones (OT, Out, backup) -0.1; Malik Muhammad II (CB, Out, backup) -0.1 |
 | CLE | -0.6 | Ronnie Hickman (S, Out) -0.3; Denzel Boston (WR, Questionable) -0.2 |
-| TB | -0.6 | Yaya Diaby (LB, Out) -0.3; Jalen McMillan (WR, Out, backup) -0.1; Antoine Winfield Jr. (S, Questionable) -0.1 |
-| NYG | -0.5 | CJ Okoye (DT, Out, backup) -0.1; Thomas Fidone II (TE, Out, backup) -0.1; Josh Sills (G, Out, backup) -0.1 |
+| TB | -0.6 | Yaya Diaby (LB, Out) -0.3; Antoine Winfield Jr. (S, Questionable) -0.1; Jalen McMillan (WR, Out, backup) -0.1 |
+| NYG | -0.5 | CJ Okoye (DT, Out, backup) -0.1; J.C. Davis (OT, Out, backup) -0.1; Josh Sills (G, Out, backup) -0.1 |
 | JAX | -0.4 | Jessie Bates III (S, Out) -0.3; B.J. Green II (DE, Out, backup) -0.1 |
-| CIN | -0.4 | Andrei Iosivas (WR, Out, backup) -0.1; Cashius Howell (DE, Out, backup) -0.1; Kyle Dugger (S, Out, backup) -0.1 |
-| PIT | -0.2 | Michael Pittman Jr. (WR, Out, backup) -0.1; Sebastian Joseph-Day (DT, Out, backup) -0.1 |
+| CIN | -0.4 | Andrei Iosivas (WR, Out, backup) -0.1; Cashius Howell (DE, Out, backup) -0.1; Brian Parker II (OT, Out, backup) -0.1 |
+| PIT | -0.2 | Sebastian Joseph-Day (DT, Out, backup) -0.1; Michael Pittman Jr. (WR, Out, backup) -0.1 |
 
 ---
-Latest odds snapshot: Sun Nov 08 08:44 ET (13:44 UTC). Latest injury fetch: Sat Nov 14 18:13 ET (23:13 UTC). Prices move; check the book before betting.
+Latest odds snapshot: Sun Nov 08 08:44 ET (13:44 UTC). Latest injury fetch: Sat Nov 14 21:53 ET (02:53 UTC). Prices move; check the book before betting.
